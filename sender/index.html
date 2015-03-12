@@ -29,8 +29,37 @@ input {
     box-shadow: 0 0 5px #8ecaed;
 }
 </style>
+</head>
+<body>
 <div class="mes"> </div>
 <script type="text/javascript" src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+<script>
+    var applicationID ='664F7F25',
+        namespace = 'urn:x-cast:ping-pong',
+        session = null;
+        
+    if (!chrome.cast || !chrome.cast.isAvailable) {
+        setTimeout(initializeCastApi, 1000);
+    }
+    
+    initializeCastApi = function() {
+    var sessionRequest = new chrome.cast.SessionRequest(applicationID);
+    var apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener);
+    chrome.cast.initialize(apiConfig, onInitSuccess, onError);
+    };
+    
+    function receiverListener (e) {
+        if (e === chrome.cast.ReceiverAvailability.AVAILABLE) {
+            
+        }
+    }
+    
+    chrome.cast.requestSession(onRequestSessionSuccess, onLaunchError);
+    
+    function onRequestSessionSuccess (e) {
+        session = e;
+    }
+</script>
 <script type="text/javascript">
 var applicationID = '664F7F25',
     namespace = 'urn:x-cast:ping-pong',
@@ -196,8 +225,6 @@ function transcribe(words) {
   sendMessage(words);
 }
 </script>
-</head>
-<body>
   <table id="wrapper">
 	<tr>
             <td>
