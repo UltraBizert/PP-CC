@@ -1,9 +1,4 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-        // RequestAnimFrame: a browser API for getting smooth animations
+    // RequestAnimFrame: a browser API for getting smooth animations
 window.requestAnimFrame = (function(){
 return  window.requestAnimationFrame       || 
         window.webkitRequestAnimationFrame || 
@@ -293,14 +288,13 @@ function update() {
                 if(ball.y + ball.r > H) {
                     ball.y = H/2;
                     ball.x = W/2;
-
-                    //gameOver();
+                    gameOver();
                 } 
 
                 else if(ball.y < 0) {
                     ball.y = H/2;
                     ball.x = W/2;
-                    //gameOver();
+                    gameOver();
                 }
 
                 // If ball strikes the vertical walls, invert the 
@@ -482,6 +476,3 @@ function btnClick(e) {
 
 // Show the start screen
 startScreen();
-
-
-

@@ -1,32 +1,3 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- 
-
-        
-    if (!chrome.cast || !chrome.cast.isAvailable) {
-        setTimeout(initializeCastApi, 1000);
-    }
-    
-    initializeCastApi = function() {
-    var sessionRequest = new chrome.cast.SessionRequest(applicationID);
-    var apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener);
-    chrome.cast.initialize(apiConfig, onInitSuccess, onError);
-    };
-    
-    function receiverListener (e) {
-        if (e === chrome.cast.ReceiverAvailability.AVAILABLE) {
-            
-        }
-    }
-    
-    chrome.cast.requestSession(onRequestSessionSuccess, onLaunchError);
-    
-    function onRequestSessionSuccess (e) {
-        session = e;
-    }
-*/
 var applicationID ='664F7F25',
         namespace = 'urn:x-cast:ping-pong',
         session = null;
