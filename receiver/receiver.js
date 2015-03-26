@@ -1,12 +1,7 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 window.onload  = function () {
             cast.receiver.logger.setLevelValue(0);
-            window.castReceiverManager = cast.receiver.castReceiverManager.getInstanse();
-
+            window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
+        
             castReceiverManager.onSenderConnected = function(event) {
             console.log('Received Sender Connected event: ' + event.data);
             };
