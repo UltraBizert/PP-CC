@@ -35,7 +35,7 @@ window.addEventListener("keyup", doKeyUp, false);
 
 canvas.width = W;
 canvas.height = H;
-
+console.log(W/300,H/100);
 paddles.push(new Paddle("bottom"));
 paddles.push(new Paddle("top"));
 
@@ -47,8 +47,8 @@ ball = {
     y: H/2, 
     r: 5,
     c: "white",
-    vx: 4 * random(),
-    vy: 8 * random(),
+    vx: W/300 * random(),
+    vy: H/100 * random(),
     draw: function() {
         ctx.beginPath();
         ctx.fillStyle = this.c;
@@ -95,7 +95,7 @@ pause = {
     state: false,
     draw: function() {
         ctx.fillStlye = "white";
-        ctx.fillText("Game on pause", W/2, H/2 - 25 );
+        ctx.fillText('pause', W/2-70, H/2 - 25 );
     },
     time: function () {
         ctx.fillStyle = "white";
@@ -108,18 +108,18 @@ pause = {
             ctx.fillText(3, W/2, H/2);
             ctx.fillStyle = "white";
             ctx.fillText(2, W/2, H/2); 
-        }, 1000);
+        }, 500);
         window.setTimeout(function(){
             ctx.fillStyle = "green";
             ctx.fillText(2, W/2, H/2);
             ctx.fillStyle = "white";
             ctx.fillText(1, W/2, H/2); 
-        }, 2000);
+        }, 1000);
         window.setTimeout(function(){
             ctx.fillStyle = "green";
             ctx.fillText(1, W/2, H/2);
             animloop();
-        }, 3000);
+        }, 1500);
     }
 };
 
@@ -166,12 +166,12 @@ function draw() {
 };
 
 function increaseSpd(score) {
-    if((score/2) % 4 == 0) {
-        if(Math.abs(ball.vx) < 5) {
-            ball.vx += (ball.vx < 0) ? -1 : 1;
-            ball.vy += (ball.vy < 0) ? -2 : 2;
-        }
-    }
+    // if((score/2) % 4 == 0) {
+    //     if(Math.abs(ball.vx) < 5) {
+    //         ball.vx += (ball.vx < 0) ? -1 : 1;
+    //         ball.vy += (ball.vy < 0) ? -2 : 2;
+    //     }
+    // }
 };
 
 function doKeyDown (e) {
@@ -203,7 +203,12 @@ function doKeyUp (e) {
 };
 
 function update() {
-
+    ctx.strokeStyle = "white";
+        ctx.lineWidth = "2";
+        ctx.strokeRect(this.x, this.y, this.w, this.h);
+        ctx.fillStlye = "white";
+        ctx.fillText(playerData, W/2, H/2 - 25 );
+    /*
     if (pause.state === false) {
 
         updateScore(p2,p1);
@@ -276,7 +281,7 @@ function collides(b, p) {
         }
 
         else return false;
-    }
+    }*/
 };
 
 function collideAction(ball, p) {
