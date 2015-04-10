@@ -1,6 +1,6 @@
 var applicationID ='664F7F25',
-        namespace = 'urn:x-cast:ping-pong',
-        session = null;
+namespace = 'urn:x-cast:ping-pong',
+session = null;
 
 $( document ).ready (function () {
     var loadCastInterval = setInterval (function () {
@@ -11,11 +11,7 @@ $( document ).ready (function () {
         } else {
             console.log('Unavailible');
         }
-    }, 1000);
-});
-
-$('#castme').click(function () {
-    launchApp();
+    }, 100);
 });
 
 function launchApp () {
@@ -27,14 +23,18 @@ function onRequestSessionSuccess (e) {
     session = e;
 }
 
-function onLaunchError () {
-    console.log('Error connecting to the cromecast');
+function onLaunchError (e) {
+    console.log('Error connecting to the chromecast');
+    console.log(e);
 }
 
 function InitializeCastAPI(){
-    var sessionRequest = new chrome.cast.SessionRequest(applicationID);
-    var apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener);
-    chrome.cast.initialize(apiConfig, onInitSuccess, onInitError);
+    var sessionRequest = new chrome.cast.SessionRequest(applicationID),
+        apiConfig = new chrome.cast.ApiConfig(sessionRequest, sessionListener, receiverListener),
+        ss = new chrome.cast.initialize(apiConfig, onInitSuccess, onInitError);
+    console.log(sessionRequest);
+    console.log(apiConfig);
+    console.log(ss);
 } 
 
 function sessionListener (e) {
@@ -49,6 +49,8 @@ function sessionListener (e) {
 function receiverListener(e) {
     if( e === 'available' ) {
         console.log("Chromecast was found on the network.");
+        console.log(e);
+        launchApp();
     }
     else {
         console.log("There are no Chromecasts available.");
