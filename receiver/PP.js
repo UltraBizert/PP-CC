@@ -203,12 +203,7 @@ function doKeyUp (e) {
 };
 
 function update() {
-    ctx.strokeStyle = "white";
-        ctx.lineWidth = "2";
-        ctx.strokeRect(this.x, this.y, this.w, this.h);
-        ctx.fillStlye = "white";
-        ctx.fillText(playerData, W/2, H/2 - 25 );
-    /*
+    
     if (pause.state === false) {
 
         updateScore(p2,p1);
@@ -281,7 +276,7 @@ function collides(b, p) {
         }
 
         else return false;
-    }*/
+    }
 };
 
 function collideAction(ball, p) {
