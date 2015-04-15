@@ -54,6 +54,10 @@ ball = {
         ctx.fillStyle = this.c;
         ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, false);
         ctx.fill();
+    },
+    move: function () {
+        this.x += this.vx;
+        this.y += this.vy;
     }
 };
 
@@ -118,9 +122,9 @@ pause = {
         window.setTimeout(function(){
             ctx.fillStyle = "green";
             ctx.fillText(1, W/2, H/2);
-            animloop();
+            animation();
         }, 1500);
-    }
+    },    
 };
 
 restart = {
@@ -138,7 +142,14 @@ restart = {
     }
 };
 
-animloop ();
+animation ();
+
+function animation() {
+    if(init) cancelRequestAnimFrame(init);
+    init = requestAnimFrame(animation);
+    draw();
+};
+
 
 function paintCanvas() {
     ctx.fillStyle = "green";
@@ -160,7 +171,7 @@ function draw() {
         p = paddles[i];
         ctx.fillStyle = "white";
         ctx.fillRect(p.x, p.y, p.w, p.h);
-    }
+    }    
     ball.draw();
     update();
 };
@@ -203,30 +214,29 @@ function doKeyUp (e) {
 };
 
 function update() {
-    
-    if (pause.state === false) {
 
-        updateScore(p2,p1);
-        
-        if(key.aleft == true && p1.x>=0) p1.x-=15;
+    updateScore(p2,p1);    
+
+    if(key.aleft == true && p1.x>=0) p1.x-=15;
          else if (key.aright == true && p1.x <= W-p1.w) p1.x+=15;
         
-        if (key.left == true && p2.x>=0) p2.x -= 15;
+    if (key.left == true && p2.x>=0) p2.x -= 15;
          else if (key.right == true && p2.x<=W-p2.w) p2.x += 15;
 
-        if (key.restart == true) {
-            p1.score = 0;
-            p2.score = 0;
-            ball.x = W/2;
-            ball.y = H/2;
-            ball.vx = ball.vx * random();
-            ball.vy = ball.vy * random();
-            key.restart = false;
-            pause.time();
-        }
-        
-        ball.x += ball.vx;
-        ball.y += ball.vy;
+    if (key.restart == true) {
+        p1.score = 0;
+        p2.score = 0;
+        ball.x = W/2;
+        ball.y = H/2;
+        ball.vx = ball.vx * random();
+        ball.vy = ball.vy * random();
+        key.restart = false;
+        pause.time();
+    }
+
+    if (pause.state === false) {
+
+        ball.move();
 
         if(collides(ball, p1)) {
             collideAction(ball, p1);
@@ -263,7 +273,7 @@ function update() {
 };
 
 function collides(b, p) {
-    if(b.x + ball.r >= p.x && b.x - ball.r <=p.x + p.w) {
+    if(b.x + b.r >= p.x && b.x - b.r <=p.x + p.w) {
 
         if(b.y >= (p.y - p.h) && p.y > 0){
             paddleHit = 1;
@@ -310,12 +320,6 @@ function gameOver() {
     cancelRequestAnimFrame(init);
 
     restartBtn.draw();
-};
-
-function animloop() {
-	if(init) cancelRequestAnimFrame(init);
-	init = requestAnimFrame(animloop);
-    draw();
 };
 
 function random () {

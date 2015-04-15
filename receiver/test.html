@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tests</title>		
+		
+		<script type="text/javascript" src="PP.js"></script>
+    	<script src="qunit.js"></script>
+		<link rel="stylesheet" href="qunit.css" />
+	</head>
+	<body>		
+	<script>
+	test("first", function() {
+        var b = {r:5, x:50, y:50},
+        	p = {h:5, w:10, x:50, y:50},
+        	b1 = {r:20, x:150, y:150},
+        	p1 = {h:5, w:10, x:10, y:5},
+        	b2 = {r:50, x:510, y:500},
+        	p2 = {h:50, w:100, x:500, y:10};
+
+
+        equal(collides(b,p), true, 'it true');
+        equal(collides(b1,p1), true);
+        equal(collides(b2,p2), true);
+        equal(collides(b,p1), true);
+        equal(collides(b1,p), true);
+        equal(collides(b2,p1), true);        
+    });
+    
+	</script>
+	<h1 id="qunit-header">QUnit Test Suite</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+	</body>
+</html>
