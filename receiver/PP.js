@@ -13,18 +13,33 @@ return  window.CancelRequestAnimationFrame    ||
 
 var canvas = document.getElementById("playground"),
     ctx = canvas.getContext("2d"), 
-    W = window.innerWidth-50, 
-    H = window.innerHeight-50, 
+    W = window.innerWidth, 
+    H = window.innerHeight, 
     particles = [], 
     ball = {}, 
     paddles = [2], 
     key = {},
     flag = 0, // Flag variable which is changed on collision
-    startBtn = {}, 
-    restartBtn = {}, 
     init, 
     paddleHit,
-    gameType = ['Friends', 'Opponents'];
+    gameStages = {
+    waiting: "waiting",
+    ready: "ready",
+    round: "round",
+    pause: "pause",
+    endround: "endRound",
+    endgame: "endGame"
+    },
+    gameTypes = {
+        opponents: "opponents",
+        friends: "friends"
+    },
+    game = {
+        type: gameTypes.friends,
+        stage: gameStages.waiting,
+        score: 0,
+    };
+
 
 ctx.font = "18px Arial, sans-serif";
 ctx.textAlign = "center";
@@ -35,7 +50,7 @@ window.addEventListener("keyup", doKeyUp, false);
 
 canvas.width = W;
 canvas.height = H;
-console.log(W/300,H/100);
+
 paddles.push(new Paddle("bottom"));
 paddles.push(new Paddle("top"));
 
@@ -99,7 +114,7 @@ pause = {
     state: false,
     draw: function() {
         ctx.fillStlye = "white";
-        ctx.fillText('pause', W/2-70, H/2 - 25 );
+        ctx.fillText('pause', W/2-15, H/2-25);
     },
     time: function () {
         ctx.fillStyle = "white";
@@ -142,7 +157,28 @@ restart = {
     }
 };
 
-animation ();
+main();
+
+function main () {
+     
+    
+    if (typeof playerData !== 'undefined') game.type = playerData.game.type;
+    if (typeof playerData !== 'undefined') game.stage = playerData.game.stage;
+
+    if(game.stage != "round") setTimeout(main, 1000);
+    
+    if(game.stage == 'round') animation ();
+    
+}
+
+function score (type, paddle) {
+    paddle = paddle || null;
+    if(type == gameTypes.opponents) {
+        paddle.score++;
+    } else if (type == gameTypes.friends && paddle == null) {
+        game.score++;
+    } else if (type ==gameTypes.friends && paddle !==null) gameOver();
+}
 
 function animation() {
     if(init) cancelRequestAnimFrame(init);
@@ -200,6 +236,7 @@ function doKeyDown (e) {
 
     if (e.keyCode == 82) {
         key.restart = true;
+        game.stage = gameStages.round;
     }
 };
 
@@ -215,7 +252,7 @@ function doKeyUp (e) {
 
 function update() {
 
-    updateScore(p2,p1);    
+    updateScore(game.type, p2, p1);    
 
     if(key.aleft == true && p1.x>=0) p1.x-=15;
          else if (key.aright == true && p1.x <= W-p1.w) p1.x+=15;
@@ -226,6 +263,7 @@ function update() {
     if (key.restart == true) {
         p1.score = 0;
         p2.score = 0;
+        game.score = 0;
         ball.x = W/2;
         ball.y = H/2;
         ball.vx = ball.vx * random();
@@ -240,23 +278,23 @@ function update() {
 
         if(collides(ball, p1)) {
             collideAction(ball, p1);
+            score(game.type);
         }
         else if(collides(ball, p2)) {
             collideAction(ball, p2);
+            score(game.type);
         } 
         else {  
         	increaseSpd(p1.score+p2.score);
             if(ball.y + ball.r > H) {
                 ball.y = H/2;
                 ball.x = W/2;
-                p2.score++;
-                pause.time();
+                score (game.type, p2);                
             }
             else if(ball.y < 0) {
                 ball.y = H/2;
                 ball.x = W/2;
-                p1.score++;
-                pause.time();
+                score(game.type, p1);                
             }
             
             if(ball.x + ball.r > W) {
@@ -301,13 +339,21 @@ function collideAction(ball, p) {
     }
 };
 
-function updateScore(paddles1, paddles2) {
+function updateScore(type, paddles1, paddles2) {
     ctx.fillStlye = "white";
     ctx.font = "16px Arial, sans-serif";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.fillText("Score: " + paddles1.score, W/2, H/2-paddles2.y/4 );
-    ctx.fillText("Score: " + paddles2.score, W/2, H/2+paddles2.y/4 );
+
+    if(type == 'opponents'){
+        ctx.fillText( paddles1.score, W/2, H/2-paddles2.y/4 );
+        ctx.fillText( paddles2.score, W/2, H/2+paddles2.y/4 );
+    } else if (type == 'friends') {
+        ctx.fillText( game.score, W/2, H/2);
+    }
+    
+
+    
 };
 
 function gameOver() {
@@ -315,11 +361,10 @@ function gameOver() {
     ctx.font = "20px Arial, sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText("Game Over - You scored points!", W/2, H/2 + 25 );
-   
+    ctx.fillText("Game Over - You scored points!", W/2, H/2 - 25 );
+    game.stage = gameStages.endgame;
     cancelRequestAnimFrame(init);
-
-    restartBtn.draw();
+    main();
 };
 
 function random () {
