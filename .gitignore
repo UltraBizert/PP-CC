@@ -1,7 +1,7 @@
 # Created by https://www.gitignore.io
 
 ### NetBeans ###
-nbproject/private/
+nbproject/
 build/
 nbbuild/
 dist/
@@ -20,3 +20,4 @@ nb-configuration.xml
 # Linux trash folder which might appear on any partition or disk
 .Trash-*
 
+node_modules/
