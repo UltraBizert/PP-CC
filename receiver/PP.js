@@ -140,7 +140,7 @@ pause = {
             ctx.fillText(1, W/2, H/2);
             animation();
         }, 1500);
-    },    
+    },
 };
 
 restart = {
@@ -158,12 +158,11 @@ restart = {
     }
 };
 
-// main();
-animation ();
-message('it work');
+main();
 
 function main () {
      
+console.log('main');
     
     if (typeof playerData !== 'undefined') game.type = playerData.game.type;
     if (typeof playerData !== 'undefined') game.stage = playerData.game.stage;    
@@ -257,8 +256,9 @@ function update() {
 
     updateScore(game.type, p2, p1);    
 
-    if(key.aleft == true && p1.x>=0) p1.x-=15;
-         else if (key.aright == true && p1.x <= W-p1.w) p1.x+=15;
+    if(playerData.player.move === true && playerData.player.direction === "left" && p1.x>=0) p1.x-=15;
+        else if (playerData.player.move === true && playerData.player.direction === "right" && p1.x <= W-p1.w) p1.x+=15;
+    console.log(p1.x);
         
     if (key.left == true && p2.x>=0) p2.x -= 15;
          else if (key.right == true && p2.x<=W-p2.w) p2.x += 15;
