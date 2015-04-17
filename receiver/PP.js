@@ -1,3 +1,4 @@
+$(window).load(function() {
 // RequestAnimFrame: a browser API for getting smooth animations
 window.requestAnimFrame = (function(){
 return  window.RequestAnimationFrame || 
@@ -157,13 +158,15 @@ restart = {
     }
 };
 
-main();
+// main();
+animation ();
+message('it work');
 
 function main () {
      
     
     if (typeof playerData !== 'undefined') game.type = playerData.game.type;
-    if (typeof playerData !== 'undefined') game.stage = playerData.game.stage;
+    if (typeof playerData !== 'undefined') game.stage = playerData.game.stage;    
 
     if(game.stage != "round") setTimeout(main, 1000);
     
@@ -371,3 +374,6 @@ function random () {
     if(Math.floor(Math.random()*2) == 0) return 1;
         else return -1;
 };
+
+
+});

@@ -28,7 +28,7 @@
 // };
 var playerData = {game:{type:'opponents', stage:'round'}};
 window.onload = function() {
-        cast.receiver.logger.setLevelValue(0);
+        cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
         window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
         console.log('Starting Receiver Manager');
         
@@ -65,17 +65,19 @@ window.onload = function() {
 
         // handler for the CastMessageBus message event
         window.messageBus.onMessage = function(event) {
-          console.log('Message [' + event.senderId + ']: ' + event.data);
+          //console.log('Message [' + event.senderId + ']: ' + event.data);
           // display the message from the sender
-          displayText(event.data);
+          playerData = JSON.parse(event.data);
+          console.log(playerData.game.stage);
           // inform all senders on the CastMessageBus of the incoming message event
           // sender message listener will be invoked
           window.messageBus.send(event.senderId, event.data);
+          window.messageBus.send(event.senderId, 'I got your message.');          
         }
 
         // initialize the CastReceiverManager with an application status message
         window.castReceiverManager.start({statusText: "Application is starting"});
-        console.log('Receiver Manager started');
+        console.log(event.data);
       };
       
       // utility function to display the text message in the input field
@@ -84,5 +86,9 @@ window.onload = function() {
         playerData = text;
         window.castReceiverManager.setApplicationState(text);
       };
+
+      function message (mess) {
+        window.messageBus.send(event.senderId, mess);
+      }
 
 

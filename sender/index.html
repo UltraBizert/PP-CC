@@ -111,6 +111,7 @@ function sessionUpdateListener(isAlive) {
  */
 function receiverMessage(namespace, message) {
   appendMessage("receiverMessage: "+namespace+", "+message);
+  console.log(message);
 };
 
 /**
@@ -138,13 +139,24 @@ function stopApp() {
  * @param {string} message A message string
  */
 function sendMessage(message) {
+  messages = { 
+    "game": {
+      "stage": "round",
+      "type": "opponents",
+    },
+    "player": {
+      "move": "left",
+    },
+    "messag": "message",
+  }
+
   if (session!=null) {
-    session.sendMessage(namespace, message, onSuccess.bind(this, "Message sent: " + message), onError);
+    session.sendMessage(namespace, messages, onSuccess.bind(this, "Message sent: " + messages), onError);
   }
   else {
     chrome.cast.requestSession(function(e) {
         session = e;
-        session.sendMessage(namespace, message, onSuccess.bind(this, "Message sent: " + message), onError);
+        session.sendMessage(namespace, messages, onSuccess.bind(this, "Message sent: " + messages), onError);
       }, onError);
   }
 }
@@ -187,7 +199,7 @@ function transcribe(words) {
   </table>	
 
   <!-- Debbugging output -->
-  <div style="margin:10px; visibility:hidden;">
+  <div style="margin:10px;">
     <textarea rows="20" cols="70" id="debugmessage">
     </textarea>
   </div>
