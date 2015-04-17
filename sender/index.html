@@ -139,24 +139,14 @@ function stopApp() {
  * @param {string} message A message string
  */
 function sendMessage(message) {
-  messages = { 
-    "game": {
-      "stage": "round",
-      "type": "opponents",
-    },
-    "player": {
-      "move": "left",
-    },
-    "messag": "message",
-  }
-
+  
   if (session!=null) {
-    session.sendMessage(namespace, messages, onSuccess.bind(this, "Message sent: " + messages), onError);
+    session.sendMessage(namespace, message, onSuccess.bind(this, "Message sent: " + message), onError);
   }
   else {
     chrome.cast.requestSession(function(e) {
         session = e;
-        session.sendMessage(namespace, messages, onSuccess.bind(this, "Message sent: " + messages), onError);
+        session.sendMessage(namespace, message, onSuccess.bind(this, "Message sent: " + message), onError);
       }, onError);
   }
 }
@@ -185,6 +175,57 @@ function update() {
 function transcribe(words) {
   sendMessage(words);
 }
+</script>
+<script type="text/javascript">
+window.addEventListener("keydown", doKeyDown, false);
+window.addEventListener("keyup", doKeyUp, false);
+var messages = { 
+
+    game: {
+      stage: null,
+      type: null,
+    },
+
+    player: {
+      id: null,
+      move: false,
+      direction: null,
+    },
+
+    messag: null,
+  }
+
+  //setInterval(function(){sendMessage(messages)},1000);
+
+  function doKeyDown (e) {
+
+    if (e.keyCode === 65){ 
+      messages.player.move = true;
+      messages.player.direction = "left";
+    }
+     else if (e.keyCode === 68){
+        messages.player.move = true;
+        messages.player.direction = "right";
+     }      
+    
+    if(e.keyCode == 80) {
+      if(pause.state === false) pause.state=true;
+       else pause.state = false;
+    }    
+
+    if (e.keyCode == 82) {
+        key.restart = true;
+        game.stage = gameStages.round;
+    }
+};
+
+
+function doKeyUp (e) {
+
+    if (e.keyCode === 65) messages.player.move = false; 
+     else if (e.keyCode === 68) messages.player.move = false;
+}     
+
 </script>
 </head>
 <body>

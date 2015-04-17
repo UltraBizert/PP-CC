@@ -60,8 +60,7 @@ window.onload = function() {
 
         // create a CastMessageBus to handle messages for a custom namespace
         window.messageBus =
-          window.castReceiverManager.getCastMessageBus(
-              'urn:x-cast:com.google.cast.sample.helloworld');
+          window.castReceiverManager.getCastMessageBus('urn:x-cast:com.google.cast.sample.helloworld');
 
         // handler for the CastMessageBus message event
         window.messageBus.onMessage = function(event) {
@@ -71,8 +70,7 @@ window.onload = function() {
           console.log(playerData.game.stage);
           // inform all senders on the CastMessageBus of the incoming message event
           // sender message listener will be invoked
-          window.messageBus.send(event.senderId, event.data);
-          window.messageBus.send(event.senderId, 'I got your message.');          
+          window.messageBus.send(event.senderId, event.data);                   
         }
 
         // initialize the CastReceiverManager with an application status message
