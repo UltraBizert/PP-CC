@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html>    
-  <title>Ping-Pong</title>
+	<title>Ping-Pong</title>
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-  <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script> 
-  <script type="text/javascript" src="receiver.js"></script>     
-  <script type="text/javascript" src="PP.js"></script>  
-     
-  <link rel="stylesheet" type="text/css" href="style_r.css">       
+	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script> 
+	<script type="text/javascript" src="main.js"></script>
+	<script type="text/javascript" src="receiver.js"></script>
+	<script type="text/javascript" src="PP.js"></script>
 
-    <div id="ground">    
-      <div class="playground"> 
-        <div id="loading">
-          <div id="loading-center">
-            <div id="loading-center-absolute">
-              <div id="object"></div>
-            </div>
-          </div>     
-        </div>      
-        <canvas id = "playground"></canvas>
-      </div>
-    </div>    
-              
-  
+	<link rel="stylesheet" type="text/css" href="style_r.css">
+
+		<div id="ground">
+			<div class="playground"> 
+				<div id="loading">
+					<div id="loading-center">
+						<div id="loading-center-absolute">
+							<div id="object"></div>
+						</div>
+					</div>
+				</div>
+				<canvas id = "playground"></canvas>
+			</div>
+		</div>
+
 
 <script type="text/javascript">
-  $(window).load(function() {
-   $("#loading").fadeOut(500);
+	$(window).load(function() {
+	 $("#loading").fadeOut(500);
 })
 </script>
 
-</html>     
+</html>
