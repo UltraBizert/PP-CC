@@ -51,12 +51,10 @@ window.addEventListener("keyup", doKeyUp, false);
 canvas.width = W;
 canvas.height = H;
 
-
 // paddles.push(new Paddle("bottom"));
 // paddles.push(new Paddle("top"));
 // p1 =players[0].paddle;
 // p2 =players[1].paddle;
-
 
 ball = {
 	x: W/2,
@@ -193,13 +191,18 @@ function paintCanvas() {
 	ctx.fillRect(0, 0, W, H);
 }
 
+<<<<<<< HEAD
 function createPaddle(pos) {
+=======
+function Paddle(pos) {
+>>>>>>> 84052d8d8d4cdd12b0bf71ab8c36a47f89879afa
 	this.h = 5;
 	this.w = 150;
 	this.x = W/2 - this.w/2;
 	this.y = (pos == 1) ? 0 : H - this.h;
 	this.scoreY = (pos == 1)
 	this.score = 0;
+<<<<<<< HEAD
 
 	this.move = function(move, direction) {
 		console.log(W, H);
@@ -209,6 +212,8 @@ function createPaddle(pos) {
 			console.log(this.x);
 		}
 	}
+=======
+>>>>>>> 84052d8d8d4cdd12b0bf71ab8c36a47f89879afa
 };
 
 function draw() {
@@ -238,11 +243,19 @@ function doKeyDown (e) {
 
 	if(e.keyCode === 37) key.aleft = true;
 	 else if (e.keyCode === 39) key.aright = true;
+<<<<<<< HEAD
 
 	if(e.keyCode == 80) {
 		if(pause.state === false) pause.state=true;
 		 else pause.state = false;
 	}
+=======
+	
+	if(e.keyCode == 80) {
+		if(pause.state === false) pause.state=true;
+		 else pause.state = false;
+	}    
+>>>>>>> 84052d8d8d4cdd12b0bf71ab8c36a47f89879afa
 
 	if (e.keyCode == 82) {
 		key.restart = true;

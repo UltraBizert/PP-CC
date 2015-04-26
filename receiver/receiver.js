@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 var data = {game:{type:'opponents', stage:'round'}},
+=======
+var playerData = {game:{type:'opponents', stage:'round'}},
+>>>>>>> 84052d8d8d4cdd12b0bf71ab8c36a47f89879afa
 		players = [];
 window.onload = function() {
 				cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
@@ -39,6 +43,7 @@ window.onload = function() {
 				window.messageBus.onMessage = function(event) {
 					//console.log('Message [' + event.senderId + ']: ' + event.data);
 					// display the message from the sender
+
 					data = JSON.parse(event.data);
 					console.log(players[0]);
 					console.log(data.messag);
@@ -77,7 +82,11 @@ window.onload = function() {
 			// utility function to display the text message in the input field
 			function displayText(text) {
 				console.log(text);
+<<<<<<< HEAD
 				data = text;
+=======
+				playerData = text;
+>>>>>>> 84052d8d8d4cdd12b0bf71ab8c36a47f89879afa
 				window.castReceiverManager.setApplicationState(text);
 			};
 
