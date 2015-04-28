@@ -5,108 +5,6 @@ ctx.textBaseline = "middle";
 window.addEventListener("keydown", doKeyDown, false);
 window.addEventListener("keyup", doKeyUp, false);
 
-// paddles.push(new Paddle("bottom"));
-// paddles.push(new Paddle("top"));
-
-
-
-// p1 = paddles[1];
-// p2 = paddles[2];
-
-// ball = {
-	
-// 	draw: function() {
-// 		ctx.beginPath();
-// 		ctx.fillStyle = this.c;
-// 		ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, false);
-// 		ctx.fill();
-// 	},
-// 	move: function () {
-// 		this.x += this.vx;
-// 		this.y += this.vy;
-// 	}
-// };
-
-start = {
-	w: 100,
-	h: 50,
-	x: W/2-50,
-	y: H/2-25,
-
-	draw: function() {
-		ctx.strokeStyle = "white";
-		ctx.lineWidth = "2";
-		ctx.strokeRect(this.x, this.y, this.w, this.h);
-		ctx.fillStlye = "white";
-		ctx.fillText("First", W/2, H/2 );
-	}
-};
-
-second = {
-	w:100,
-	h: 50,
-	x: W/2+60,
-	y: H/2-25,
-
-	draw: function () {
-		ctx.strokeStyle = "white";
-		ctx.lineWidth = "2";
-		ctx.strokeRect(this.x,this.y, this.w, this.h);
-		ctx.fillStlye = "white";
-		ctx.fillText("Second",this.x+50,this.y+25);
-	}
-};
-
-pause = {
-	w: 100,
-	h: 50,
-	x: W/2 - 50,
-	y: H/2 - 50,
-	state: false,
-	draw: function() {
-		ctx.fillStlye = "white";
-		ctx.fillText('pause', W/2-15, H/2-25);
-	},
-	time: function () {
-		ctx.fillStyle = "white";
-		ctx.fillText(3, W/2, H/2);
-		
-		cancelRequestAnimFrame(init);
-
-		window.setTimeout(function(){
-			ctx.fillStyle = "green";
-			ctx.fillText(3, W/2, H/2);
-			ctx.fillStyle = "white";
-			ctx.fillText(2, W/2, H/2); 
-		}, 500);
-		window.setTimeout(function(){
-			ctx.fillStyle = "green";
-			ctx.fillText(2, W/2, H/2);
-			ctx.fillStyle = "white";
-			ctx.fillText(1, W/2, H/2); 
-		}, 1000);
-		window.setTimeout(function(){
-			ctx.fillStyle = "green";
-			ctx.fillText(1, W/2, H/2);
-			animation();
-		}, 1500);
-	},
-};
-
-restart = {
-	w: 100,
-	h: 50,
-	x: W/2 - 50,
-	y: H/2 - 50,
-
-	draw: function() {
-		ctx.strokeStyle = "white";
-		ctx.lineWidth = "2";
-		ctx.strokeRect(this.x, this.y, this.w, this.h);
-		ctx.fillStlye = "white";
-		ctx.fillText("Restart", W/2, H/2 - 25 );
-	}
-};
 
 window.requestAnimFrame = (function(){
 return  window.RequestAnimationFrame || 
@@ -309,7 +207,7 @@ function doKeyDown (e) {
 	if(e.keyCode == 80) {
 		if(pause.state === false) pause.state=true;
 		 else pause.state = false;
-	}    
+	}
 
 	if (e.keyCode == 82) {
 		key.restart = true;
@@ -390,3 +288,108 @@ function random () {
 	if(Math.floor(Math.random()*2) == 0) return 1;
 		else return -1;
 };
+
+
+
+// paddles.push(new Paddle("bottom"));
+// paddles.push(new Paddle("top"));
+
+
+
+// p1 = paddles[1];
+// p2 = paddles[2];
+
+// ball = {
+	
+// 	draw: function() {
+// 		ctx.beginPath();
+// 		ctx.fillStyle = this.c;
+// 		ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, false);
+// 		ctx.fill();
+// 	},
+// 	move: function () {
+// 		this.x += this.vx;
+// 		this.y += this.vy;
+// 	}
+// };
+
+// start = {
+// 	w: 100,
+// 	h: 50,
+// 	x: W/2-50,
+// 	y: H/2-25,
+
+// 	draw: function() {
+// 		ctx.strokeStyle = "white";
+// 		ctx.lineWidth = "2";
+// 		ctx.strokeRect(this.x, this.y, this.w, this.h);
+// 		ctx.fillStlye = "white";
+// 		ctx.fillText("First", W/2, H/2 );
+// 	}
+// };
+
+// second = {
+// 	w:100,
+// 	h: 50,
+// 	x: W/2+60,
+// 	y: H/2-25,
+
+// 	draw: function () {
+// 		ctx.strokeStyle = "white";
+// 		ctx.lineWidth = "2";
+// 		ctx.strokeRect(this.x,this.y, this.w, this.h);
+// 		ctx.fillStlye = "white";
+// 		ctx.fillText("Second",this.x+50,this.y+25);
+// 	}
+// };
+
+// pause = {
+// 	w: 100,
+// 	h: 50,
+// 	x: W/2 - 50,
+// 	y: H/2 - 50,
+// 	state: false,
+// 	draw: function() {
+// 		ctx.fillStlye = "white";
+// 		ctx.fillText('pause', W/2-15, H/2-25);
+// 	},
+// 	time: function () {
+// 		ctx.fillStyle = "white";
+// 		ctx.fillText(3, W/2, H/2);
+		
+// 		cancelRequestAnimFrame(init);
+
+// 		window.setTimeout(function(){
+// 			ctx.fillStyle = "green";
+// 			ctx.fillText(3, W/2, H/2);
+// 			ctx.fillStyle = "white";
+// 			ctx.fillText(2, W/2, H/2); 
+// 		}, 500);
+// 		window.setTimeout(function(){
+// 			ctx.fillStyle = "green";
+// 			ctx.fillText(2, W/2, H/2);
+// 			ctx.fillStyle = "white";
+// 			ctx.fillText(1, W/2, H/2); 
+// 		}, 1000);
+// 		window.setTimeout(function(){
+// 			ctx.fillStyle = "green";
+// 			ctx.fillText(1, W/2, H/2);
+// 			animation();
+// 		}, 1500);
+// 	},
+// };
+
+// restart = {
+// 	w: 100,
+// 	h: 50,
+// 	x: W/2 - 50,
+// 	y: H/2 - 50,
+
+// 	draw: function() {
+// 		ctx.strokeStyle = "white";
+// 		ctx.lineWidth = "2";
+// 		ctx.strokeRect(this.x, this.y, this.w, this.h);
+// 		ctx.fillStlye = "white";
+// 		ctx.fillText("Restart", W/2, H/2 - 25 );
+// 	}
+// };
