@@ -49,7 +49,8 @@ pg = new Playground(ctx);
 pg.init(paddles, ball);
 // pg.startAnimation(init);
 animation();
-})
+
+});
 
 function Player (senderID, number) {
 	this.id = senderID || undefined;
@@ -57,3 +58,6 @@ function Player (senderID, number) {
 	this.paddle = new createPaddle(this.number);
 	this.score = 0;
 }
+
+
+

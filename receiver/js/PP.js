@@ -5,7 +5,6 @@ ctx.textBaseline = "middle";
 window.addEventListener("keydown", doKeyDown, false);
 window.addEventListener("keyup", doKeyUp, false);
 
-
 window.requestAnimFrame = (function(){
 return  window.RequestAnimationFrame || 
 		function( callback ){
@@ -81,13 +80,12 @@ function Playground (context) {
 	// 	return undefined;
 	// };
 };
+
 // function animation() {
 // 	if(init) cancelRequestAnimFrame(init);
 // 	init = requestAnimFrame(animation);
 // 	draw();
 // };
-
-
 
 function draw() {	
 	for(var i = 0; i < paddles.length; i++) {
@@ -99,12 +97,12 @@ function draw() {
 
 function Paddle(pos) {
 
-		this.h = 20;
-		this.w = 1050;
-		this.x = W/2-this.w/2;
-		this.y = (pos == "top") ? 0 : H-this.h;
-		this.scoreY = (pos == "top")
-		this.score = 0;
+	this.h = 20;
+	this.w = 1050;
+	this.x = W/2-this.w/2;
+	this.y = (pos == "top") ? 0 : H-this.h;
+	this.scoreY = (pos == "top")
+	this.score = 0;
 
 	this.draw = function (context) {
 		context.fillStyle = "white";
@@ -165,7 +163,6 @@ function collides(b, p) {
 			paddleHit = 1;
 			return true;
 		}
-
 		else if(b.y <= p.h && p.y == 0) {
 			paddleHit = 2;
 			return true;
@@ -291,6 +288,7 @@ function random () {
 
 
 
+
 // paddles.push(new Paddle("bottom"));
 // paddles.push(new Paddle("top"));
 
@@ -393,3 +391,4 @@ function random () {
 // 		ctx.fillText("Restart", W/2, H/2 - 25 );
 // 	}
 // };
+
