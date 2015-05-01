@@ -1,6 +1,5 @@
-var data = {game:{type:'opponents', stage:'round'}},
-	players = [];
 window.onload = function() {
+var players = [];
 	cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
 	window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
 	console.log('Starting Receiver Manager');
@@ -41,8 +40,7 @@ window.onload = function() {
 		// display the message from the sender
 
 		data = JSON.parse(event.data);
-		console.log(players[0]);
-		console.log(data.messag);
+		// console.log(players);
 
 		switch(data.messag) {
 			case "connect":
@@ -52,22 +50,23 @@ window.onload = function() {
 				}else if (players[1] === undefined && event.senderId !== players[0].id){
 				 players.push(new Player(event.senderId, 2));
 				 window.messageBus.send(event.senderId, "You connected like player 2" );
-				}
-				else window.messageBus.send(event.senderId, "Game full" );
+				}else window.messageBus.send(event.senderId, "Game full" );
 			break;
 			case "move":
 				if(event.senderId == players[0].id){
-					players[0].paddle.move(data.paddle.move, data.paddle.direction);
+					players[0].paddle.move(data.paddle);
 				} else if(event.senderId == players[1].id){
-					players[1].paddle.move(data.paddle.move, data.paddle.direction);
+					players[1].paddle.move(data.paddle);
 				} 
 			break;
 		}
 
 		console.log(players);
+		console.log(players[0].paddle.x);
+		console.log(players[1].paddle.x);
 		// inform all senders on the CastMessageBus of the incoming message event
 		// sender message listener will be invoked
-		window.messageBus.send(event.senderId, event.data);
+		// window.messageBus.send(event.senderId, event.data);
 	}
 
 	// initialize the CastReceiverManager with an application status message

@@ -1,9 +1,5 @@
-ctx.font = "18px Arial, sans-serif";
-ctx.textAlign = "center";
-ctx.textBaseline = "middle";
-
-window.addEventListener("keydown", doKeyDown, false);
-window.addEventListener("keyup", doKeyUp, false);
+// window.addEventListener("keydown", doKeyDown, false);
+// window.addEventListener("keyup", doKeyUp, false);
 
 window.requestAnimFrame = (function(){
 return  window.RequestAnimationFrame || 
@@ -49,27 +45,32 @@ function createBall () {
 function Playground (context) {
 	this.context = context || undefined;
 
-	this.init = function (paddles, ball) {
-		this.paddles = paddles || [];
+	this.init = function (paddles, ball, gameType) {
+		this.p1 = paddles[0] || [];
+		this.p2 = paddles[1] || [];
 		this.ball = ball || {};
+		this.gameType = gameType || {};
 	}
 
 	this.draw = function (context) {
 		this.context.fillStyle = '#272';
 		this.context.fillRect(0,0,W,H);
-		this.paddles[0].draw(this.context);
-		this.paddles[1].draw(this.context);
+		this.p1.draw(this.context);
+		this.p2.draw(this.context);
 		this.ball.draw(this.context);
+		updateScore(this.context, this.gameType, this.p1, this.p2);
 	};
 
 	this.main = function () {
 		this.ball.move();
-		checkCollides(this.ball, this.paddles);
+		checkCollides(this.ball, this.p1, this.p2);
 	}
+
 	// this.startAnimation = function (init) {
-	// 	if(init) cancelRequestAnimFrame(init);
-	// 	init = requestAnimFrame(this.startAnimation);
+	// 	if(init) window.cancelRequestAnimFrame(init);
+	// 	init = window.requestAnimFrame(this.startAnimation);
 	// 	this.draw();
+	// 	this.main();
 	// };
 
 	// this.stopAnimation = function (anim) {
@@ -81,67 +82,66 @@ function Playground (context) {
 	// };
 };
 
-// function animation() {
-// 	if(init) cancelRequestAnimFrame(init);
-// 	init = requestAnimFrame(animation);
-// 	draw();
-// };
 
-function draw() {	
-	for(var i = 0; i < paddles.length; i++) {
-		p = paddles[i];
-	}
-	ball.draw();
-	update();
-};
 
-function Paddle(pos) {
 
-	this.h = 20;
-	this.w = 1050;
+function createPaddle(pos) {
+
+	this.h = 10;
+	this.w = 200;
 	this.x = W/2-this.w/2;
-	this.y = (pos == "top") ? 0 : H-this.h;
-	this.scoreY = (pos == "top")
+	this.y = (pos === 1) ? 0 : H-this.h;
 	this.score = 0;
 
 	this.draw = function (context) {
 		context.fillStyle = "white";
 		context.fillRect(this.x, this.y, this.w, this.h);
 	}
+
+	this.move = function (data) {
+		if(data.move === true) {
+			switch (data.direction) {
+			case "left":
+				this.x -= 15;
+			break;
+			case "right":
+				this.x += 15;
+			break;
+			}
+		}
+	}
 };
 
-function score (type, paddle) {
-	paddle = paddle || null;
-	if(type == gameTypes.opponents) {
+function score (paddle) {
+	// paddle = paddle || null;
+	// if(type == gameTypes.opponents) {
+	// 	paddle.score++;
+	// } else if (type == gameTypes.friends) {
 		paddle.score++;
-	} else if (type == gameTypes.friends && paddle == null) {
-		game.score++;
-	} else if (type ==gameTypes.friends && paddle !==null) gameOver();
+	// }
 }
 
-function checkCollides (ball, paddles) {
-	p1 = paddles[0];
-	p2 = paddles[1];
+function checkCollides (ball, p1, p2) {
 
 	if(collides(ball, p1)) {
 		collideAction(ball, p1);
-		score(game.type);
+		 score(p1);
 	}
 	else if(collides(ball, p2)) {
 		collideAction(ball, p2);
-		score(game.type);
+		 score(p1);
 	}
 	else {
-		increaseSpd(p1.score+p2.score);
+		// increaseSpd(p1.score+p2.score);
 		if(ball.y + ball.r > H) {
 			ball.y = H/2;
 			ball.x = W/2;
-			score (game.type, p2);
+			score (p2);
 		}
 		else if(ball.y < 0) {
 			ball.y = H/2;
 			ball.x = W/2;
-			score(game.type, p1);
+			score(p1);
 		}
 		
 		if(ball.x + ball.r > W) {
@@ -154,7 +154,7 @@ function checkCollides (ball, paddles) {
 			ball.x = ball.r;
 		}
 }
-};
+}
 
 function collides(b, p) {
 	if(b.x + b.r >= p.x && b.x - b.r <=p.x + p.w) {
@@ -167,10 +167,9 @@ function collides(b, p) {
 			paddleHit = 2;
 			return true;
 		}
-
 		else return false;
 	}
-};
+}
 
 function collideAction(ball, p) {
 	ball.vy = -ball.vy;
@@ -182,17 +181,51 @@ function collideAction(ball, p) {
 	else if(paddleHit == 2) {
 		ball.y = p.h + ball.r;
 	}
-};
+}
 
-function increaseSpd(score) {
+function updateScore(context, type, paddle1, paddle2) {
+	context.fillStyle = "white";
+	context.font = "16px Arial, sans-serif";
+	context.textAlign = "left";
+	context.textBaseline = "top";
+
+	if(type == 'opponents'){
+		context.fillText( paddle2.score, W/2, H/2-paddle2.y/4 );
+		context.fillText( paddle1.score, W/2, H/2+paddle2.y/4 );
+	} else if (type == 'friends') {
+		context.fillText( paddle1.score, W/2, H/2);
+	}
+}
+
+function random () {
+	if(Math.floor(Math.random()*2) == 0) return 1;
+		else return -1;
+}
+
+// function increaseSpd(score) {
 	// if((score/2) % 4 == 0) {
 	//     if(Math.abs(ball.vx) < 5) {
 	//         ball.vx += (ball.vx < 0) ? -1 : 1;
 	//         ball.vy += (ball.vy < 0) ? -2 : 2;
 	//     }
 	// }
-};
+// };
 
+// function animation() {
+// 	if(init) cancelRequestAnimFrame(init);
+// 	init = requestAnimFrame(animation);
+// 	draw();
+// };
+
+// function draw() {	
+// 	for(var i = 0; i < paddles.length; i++) {
+// 		p = paddles[i];
+// 	}
+// 	ball.draw();
+// 	update();
+// };
+
+/*
 function doKeyDown (e) {
 
 	if (e.keyCode === 65) key.left = true;
@@ -200,7 +233,7 @@ function doKeyDown (e) {
 
 	if(e.keyCode === 37) key.aleft = true;
 	 else if (e.keyCode === 39) key.aright = true;
-	
+
 	if(e.keyCode == 80) {
 		if(pause.state === false) pause.state=true;
 		 else pause.state = false;
@@ -220,9 +253,9 @@ function doKeyUp (e) {
 	if(e.keyCode === 37) key.aleft = false;
 	 else if (e.keyCode === 39) key.aright = false;
 	 
-};
+};*/
 
-function update() {
+/*function update() {
 
 	updateScore(game.type, p2, p1);    
 
@@ -247,28 +280,11 @@ function update() {
 	}
 
 	if (pause.state === false) {
-
 		ball.move();
-
-	
-		
 } else pause.draw();
 };
 
 
-function updateScore(type, paddles1, paddles2) {
-	ctx.fillStlye = "white";
-	ctx.font = "16px Arial, sans-serif";
-	ctx.textAlign = "left";
-	ctx.textBaseline = "top";
-
-	if(type == 'opponents'){
-		ctx.fillText( paddles1.score, W/2, H/2-paddles2.y/4 );
-		ctx.fillText( paddles2.score, W/2, H/2+paddles2.y/4 );
-	} else if (type == 'friends') {
-		ctx.fillText( game.score, W/2, H/2);
-	}
-};
 
 function gameOver() {
 	ctx.fillStlye = "white";
@@ -280,11 +296,8 @@ function gameOver() {
 	cancelRequestAnimFrame(init);
 	main();
 };
+*/
 
-function random () {
-	if(Math.floor(Math.random()*2) == 0) return 1;
-		else return -1;
-};
 
 
 
@@ -391,4 +404,3 @@ function random () {
 // 		ctx.fillText("Restart", W/2, H/2 - 25 );
 // 	}
 // };
-

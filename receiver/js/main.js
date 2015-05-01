@@ -18,46 +18,44 @@ var canvas = document.getElementById("playground"),
 		friends: "friends"
 	},
 	game = {
-		type: gameTypes.friends,
+		type: gameTypes.opponents,
 		stage: gameStages.round,
 		score: 0,
 	};
-	// particles = [],
-	// key = {},
-	//paddleHit,
 
 $(window).load(function() {
 	$("#loading").fadeOut(500);
 
-var animation = function (pg) {
+
+var animation = function () {
 	if(init) cancelRequestAnimFrame(init);
 	init = requestAnimFrame(animation);
 	this.pg.main();
 	this.pg.draw();
 };
 
+ctx.font = "18px Arial, sans-serif";
+ctx.textAlign = "center";
+ctx.textBaseline = "middle";
+
 canvas.width = W;
 canvas.height = H;
 
-paddles.push(new Paddle('top'));
-paddles.push(new Paddle('bot'));
+paddles.push(new createPaddle(1));
+paddles.push(new createPaddle(2));
 
 ball = new createBall();
 
 pg = new Playground(ctx);
 
-pg.init(paddles, ball);
+pg.init(paddles, ball, game.type);
 // pg.startAnimation(init);
 animation();
-
 });
 
 function Player (senderID, number) {
 	this.id = senderID || undefined;
 	this.number = number || null;
-	this.paddle = new createPaddle(this.number);
+	this.paddle = new createPaddle(number);
 	this.score = 0;
 }
-
-
-
