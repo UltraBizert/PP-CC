@@ -1,5 +1,5 @@
 var applicationID = '664F7F25';
-var namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
+var namespace = 'urn:x-cast:ping-pong';
 var session = null;
 
 /**
@@ -106,7 +106,7 @@ function stopApp() {
  * @param {string} message A message string
  */
 function sendMessage(message) {
-	
+	console.log(message.messag);
 	if (session!=null) {
 		session.sendMessage(namespace, message, onSuccess.bind(this, "Message sent: " + message), onError);
 	}
@@ -124,8 +124,6 @@ function sendMessage(message) {
  */
 function appendMessage(message) {
 	console.log(message);
-	var dw = document.getElementById("debugmessage");
-	dw.innerHTML += '\n' + JSON.stringify(message);
 };
 
 /**
@@ -186,8 +184,13 @@ var messages = {
 			game.stage = gameStages.round;
 		}
 
-		if (e.keyCode == 83) {
+		if (e.keyCode === 67) {
 			messages.messag = "connect";
+			sendMessage(messages);
+		}
+
+		if(e.keyCode === 83) {
+			messages.messag = "game";
 			sendMessage(messages);
 		}
 };

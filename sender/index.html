@@ -1,56 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Hello World</title>
-<style type="text/css">
-html, body, #wrapper {
-	 height:100%;
-	 width: 100%;
-	 margin: 0;
-	 padding: 0;
-	 border: 0;
-}
-#wrapper td {
-	 vertical-align: middle;
-	 text-align: center;
-}
-input {
-	font-family: "Arial", Arial, sans-serif;
-	font-size: 40px;
-	font-weight: bold;	
-}
-.border {
-		border: 2px solid #cccccc;
-		border-radius: 5px;
-}
-.border:focus { 
-		outline: none;
-		border-color: #8ecaed;
-		box-shadow: 0 0 5px #8ecaed;
-}
-</style>
+<title>Sender ping-pong</title>
+<link rel="stylesheet" type="text/css" href="style.css">
 <script type="text/javascript" src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
 <script type="text/javascript" src = "sender.js"></script>
 </head>
 <body>
-	<table id="wrapper">
-	<tr>
-		<td>
-			<form method="get" action="JavaScript:update();">
-				<input id="input" class="border" type="text" size="30" onwebkitspeechchange="transcribe(this.value)" x-webkit-speech/>
-			</form>
-		</td>
-	</tr>
-	</table>	
-
-	<!-- Debbugging output -->
-	<div style="margin:10px;">
-		<textarea rows="20" cols="70" id="debugmessage">
-		</textarea>
-	</div>
-
-<script type="text/javascript">
-	document.getElementById("input").focus();
-</script>
+<button>Connect to chromecast</button>
+<button>Left</button>
+<button>Right</button>
+<button>Start game</button>
 </body>
 </html>

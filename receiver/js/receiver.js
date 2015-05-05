@@ -1,5 +1,47 @@
-window.onload = function() {
-var players = [];
+var canvas = document.getElementById("playground"),
+	ctx = canvas.getContext("2d"),
+	W = window.innerWidth,
+	H = window.innerHeight,
+	players = [],
+	paddles = [],
+	ball = {},
+	init,
+	gameStages = {
+		waiting: "Waiting",
+		ready: "Ready",
+		round: "Round",
+		pause: "Pause",
+		endRound: "End round",
+		endGame: "End game"
+	},
+	gameTypes = {
+		opponents: "opponents",
+		friends: "friends"
+	},
+	game = {
+		type: gameTypes.opponents,
+		stage: gameStages.round,
+	};
+
+$(window).load(function() {
+	$("#loading").fadeOut(500);
+
+
+var animation = function () {
+	if(init) cancelRequestAnimFrame(init);
+	init = requestAnimFrame(animation);
+	this.pg.main();
+	this.pg.draw();
+};
+
+ctx.font = "18px Arial, sans-serif";
+ctx.textAlign = "center";
+ctx.textBaseline = "middle";
+
+canvas.width = W;
+canvas.height = H;
+
+
 	cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
 	window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
 	console.log('Starting Receiver Manager');
@@ -32,7 +74,7 @@ var players = [];
 
 	// create a CastMessageBus to handle messages for a custom namespace
 	window.messageBus =
-		window.castReceiverManager.getCastMessageBus('urn:x-cast:com.google.cast.sample.helloworld');
+		window.castReceiverManager.getCastMessageBus('urn:x-cast:ping-pong');
 
 	// handler for the CastMessageBus message event
 	window.messageBus.onMessage = function(event) {
@@ -40,7 +82,6 @@ var players = [];
 		// display the message from the sender
 
 		data = JSON.parse(event.data);
-		// console.log(players);
 
 		switch(data.messag) {
 			case "connect":
@@ -52,6 +93,14 @@ var players = [];
 				 window.messageBus.send(event.senderId, "You connected like player 2" );
 				}else window.messageBus.send(event.senderId, "Game full" );
 			break;
+			case "game":
+			if(players[1] !== undefined) {
+				ball = new createBall();
+				pg = new Playground(ctx);
+				pg.init(players[0].paddle, players[1].paddle, ball, game.type);
+				animation(pg);
+			}else window.messageBus.send(event.senderId, "Waiting player two");
+			break;
 			case "move":
 				if(event.senderId == players[0].id){
 					players[0].paddle.move(data.paddle);
@@ -62,8 +111,6 @@ var players = [];
 		}
 
 		console.log(players);
-		console.log(players[0].paddle.x);
-		console.log(players[1].paddle.x);
 		// inform all senders on the CastMessageBus of the incoming message event
 		// sender message listener will be invoked
 		// window.messageBus.send(event.senderId, event.data);
@@ -72,17 +119,11 @@ var players = [];
 	// initialize the CastReceiverManager with an application status message
 	window.castReceiverManager.start({statusText: "Application is starting"});
 	console.log(event.data);
-};
+});
 
-	// utility function to display the text message in the input field
-	function displayText(text) {
-		console.log(text);
-		data = text;
-		window.castReceiverManager.setApplicationState(text);
-	};
-
-	function message (mess) {
-		window.messageBus.send(event.senderId, mess);
-	}
-
-
+function Player (senderID, number) {
+	this.id = senderID || undefined;
+	this.number = number || null;
+	this.paddle = new createPaddle(number);
+	this.score = 0;
+}
