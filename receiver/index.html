@@ -6,25 +6,98 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<link type="text/javascript" href="js/main.js">
 	<link type="text/javascript" href="js/PP.js">
 	<link type="text/javascript" href="js/receiver.js">
 
 		<div id="ground">
 			<div class="playground">
-				<div id="loading">
-					<div id="loading-center">
-						<div id="loading-center-absolute">
-							<div id="object"></div>
-						</div>
-					</div>
-				</div>
 				<canvas id = "playground"></canvas>
 			</div>
 		</div>
 
-	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script> 
 	<script src="js/PP.js"></script>
-	<script src="js/receiver.js"></script>
+	<script src="js/receiver.js"></script> 
+
+	<script type="text/javascript">
+	var animation = function () {
+		// if(init) cancelRequestAnimFrame(init);
+		init = requestAnimFrame(animation);
+		this.pg.main(game.stage);
+		},
+		data = {
+			paddle1: {},
+			paddle2: {},
+		};
+
+	window.onload = function () {
+
+	window.addEventListener("keydown", doKeyDown, false);
+	window.addEventListener("keyup", doKeyUp, false);
+
+
+	ctx.font = "18px Arial, sans-serif";
+	ctx.textAlign = "center";
+	ctx.textBaseline = "middle";
+
+	canvas.width = W;
+	canvas.height = H;
+
+	ball = new createBall();
+	pg = new Playground(ctx);
+	paddles.push(new Paddle(1));
+	paddles.push(new Paddle(2));
+
+	pg.init(paddles[0], paddles[1], ball, game.type);
+	animation();
+
+	}
+
+	function doKeyDown (e) {
+		if (e.keyCode === 65){ 
+			data.paddle1.move = true;
+			data.paddle1.direction = "left";
+			paddles[0].move(data.paddle1);
+			paddles[1].move(data.paddle2);
+		}else if (e.keyCode === 68){
+			data.paddle1.move = true;
+			data.paddle1.direction = "right";
+			paddles[0].move(data.paddle1);
+			paddles[1].move(data.paddle2);
+		}
+
+		if (e.keyCode === 65){ 
+			data.paddle2.move = true;
+			data.paddle2.direction = "left";
+		}else if (e.keyCode === 68){
+			data.paddle2.move = true;
+			data.paddle2.direction = "right";
+		}
+
+		if(e.keyCode == 80) {
+			if(game.stage === "Pause") game.stage="Round";
+			 else game.stage = "Pause";
+		}
+
+		if (e.keyCode == 82) {
+			key.restart = true;
+			game.stage = gameStages.round;
+		}
+
+		if (e.keyCode === 67) {
+			messages.messag = "connect";
+			sendMessage(messages);
+		}
+
+		if(e.keyCode === 83) {
+			messages.messag = "game";
+			sendMessage(messages);
+		}
+	}
+
+	function doKeyUp (e) {
+
+	}
+	</script>
+
 </html>

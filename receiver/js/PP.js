@@ -30,7 +30,7 @@ function createBall () {
 		this.x += this.vx;
 		this.y += this.vy;
 	}
-};
+}
 
 function Playground (context) {
 	this.context = context || undefined;
@@ -51,19 +51,28 @@ function Playground (context) {
 		updateScore(this.context, this.gameType, this.p1, this.p2);
 	};
 
-	this.main = function () {
+	this.main = function (gameStage) {
+		if(gameStage === "Round") {
 		this.ball.move();
 		checkCollides(this.ball, this.p1, this.p2);
+		this.draw();
+		} else {
+			pause(this.context);
+		}
 	}
-};
+}
 
-function createPaddle(pos) {
+function Paddle(pos) {
 
 	this.h = 10;
 	this.w = 200;
 	this.x = W/2-this.w/2;
-	this.y = (pos === 1) ? 0 : H-this.h;
 	this.score = 0;
+
+	if (pos === 1) {
+		this.y = 0;
+		this.friendsScore = 0;
+	} else this.y = H-this.h;
 
 	this.draw = function (context) {
 		context.fillStyle = "white";
@@ -77,22 +86,22 @@ function createPaddle(pos) {
 				if(this.x >= 0) this.x-= 15;
 			break;
 			case "right":
-				if(this.x <= W)this.x += 15;
+				if(this.x <= W-this.w)this.x += 15;
 			break;
 			}
 		}
 	}
-};
+}
 
 function checkCollides (ball, p1, p2) {
 
 	if(collides(ball, p1)) {
 		collideAction(ball, p1);
-		p1.score++;
+		p1.friendsScore++;
 	}
 	else if(collides(ball, p2)) {
 		collideAction(ball, p2);
-		p1.score++;
+		p1.friendsScore++;
 	}
 	else {
 		// increaseSpd(p1.score+p2.score);
@@ -116,7 +125,7 @@ function checkCollides (ball, p1, p2) {
 			ball.vx = -ball.vx;
 			ball.x = ball.r;
 		}
-}
+	}
 }
 
 function collides(b, p) {
@@ -156,8 +165,17 @@ function updateScore(context, type, paddle1, paddle2) {
 		context.fillText( paddle2.score, W/2, H/2-paddle2.y/4 );
 		context.fillText( paddle1.score, W/2, H/2+paddle2.y/4 );
 	} else if (type == 'friends') {
-		context.fillText( paddle1.score, W/2, H/2);
+		context.fillText( paddle1.friendsScore, W/2, H/2);
 	}
+}
+
+function pause (context) {
+	context.fillStyle = "white";
+	context.font = "16px Arial, sans-serif";
+	context.textAlign = "left";
+	context.textBaseline = "top";
+
+	context.fillText("Game on pause", W/2-W/20, H/2);
 }
 
 function random () {

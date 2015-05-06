@@ -23,9 +23,7 @@ var canvas = document.getElementById("playground"),
 		stage: gameStages.round,
 	};
 
-$(window).load(function() {
-	$("#loading").fadeOut(500);
-
+window.onload = function() {
 
 var animation = function () {
 	if(init) cancelRequestAnimFrame(init);
@@ -42,7 +40,7 @@ canvas.width = W;
 canvas.height = H;
 
 
-	cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
+	/*cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
 	window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
 	console.log('Starting Receiver Manager');
 	
@@ -118,8 +116,8 @@ canvas.height = H;
 
 	// initialize the CastReceiverManager with an application status message
 	window.castReceiverManager.start({statusText: "Application is starting"});
-	console.log(event.data);
-});
+	console.log(event.data);*/
+};
 
 function Player (senderID, number) {
 	this.id = senderID || undefined;
