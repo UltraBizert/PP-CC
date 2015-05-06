@@ -19,7 +19,7 @@ var canvas = document.getElementById("playground"),
 		friends: "friends"
 	},
 	game = {
-		type: gameTypes.opponents,
+		type: gameTypes.friends,
 		stage: gameStages.round,
 	};
 
@@ -95,7 +95,7 @@ canvas.height = H;
 			if(players[1] !== undefined) {
 				ball = new createBall();
 				pg = new Playground(ctx);
-				pg.init(players[0].paddle, players[1].paddle, ball, game.type);
+				pg.init(players[0].paddle, players[1].paddle, ball, game);
 				animation(pg);
 			}else window.messageBus.send(event.senderId, "Waiting player two");
 			break;

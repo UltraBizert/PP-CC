@@ -1,44 +1,35 @@
 <!DOCTYPE html>
 <html>
-	<title>Ping-Pong</title>
+<title>Ping-Pong</title>
 
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<link type="text/javascript" href="js/PP.js">
-	<link type="text/javascript" href="js/receiver.js">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link type="text/javascript" href="js/PP.js">
+<link type="text/javascript" href="js/receiver.js">
 
-		<div id="ground">
-			<div class="playground">
-				<canvas id = "playground"></canvas>
-			</div>
+	<div id="ground">
+		<div class="playground">
+			<canvas id = "playground"></canvas>
 		</div>
+	</div>
 
-	<script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script> 
-	<script src="js/PP.js"></script>
-	<script src="js/receiver.js"></script> 
+<script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script> 
+<script src="js/PP.js"></script>
+<script src="js/receiver.js"></script> 
 
-	<script type="text/javascript">
-	var animation = function () {
-		// if(init) cancelRequestAnimFrame(init);
-		init = requestAnimFrame(animation);
-		this.pg.main(game.stage);
-		},
-		data = {
+<script type="text/javascript">
+	var data = {
 			paddle1: {},
 			paddle2: {},
-		};
-
-	window.onload = function () {
+		},
+		requestId = 0;
 
 	window.addEventListener("keydown", doKeyDown, false);
 	window.addEventListener("keyup", doKeyUp, false);
 
-
-	ctx.font = "18px Arial, sans-serif";
-	ctx.textAlign = "center";
-	ctx.textBaseline = "middle";
+	window.onload = function () {
 
 	canvas.width = W;
 	canvas.height = H;
@@ -48,9 +39,21 @@
 	paddles.push(new Paddle(1));
 	paddles.push(new Paddle(2));
 
-	pg.init(paddles[0], paddles[1], ball, game.type);
-	animation();
+	pg.init(paddles[0], paddles[1], ball, game);
+	}
 
+	function animate(time) {
+		requestId = window.requestAnimationFrame(animate);
+		pg.main(game.stage);
+	}
+	function start() {
+		animationStartTime = Date.now();
+		requestId = window.requestAnimationFrame(animate);
+	}
+	function stop() {
+		if (requestId)
+		window.cancelAnimationFrame(requestId);
+		requestId = 0;
 	}
 
 	function doKeyDown (e) {
@@ -75,8 +78,8 @@
 		}
 
 		if(e.keyCode == 80) {
-			if(game.stage === "Pause") game.stage="Round";
-			 else game.stage = "Pause";
+			if(game.stage === "Pause") {start(); game.stage="Round";}
+			else {stop(requestId); game.stage = "Pause";}
 		}
 
 		if (e.keyCode == 82) {
@@ -98,6 +101,6 @@
 	function doKeyUp (e) {
 
 	}
-	</script>
+</script>
 
 </html>
