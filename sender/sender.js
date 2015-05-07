@@ -157,9 +157,20 @@ var messages = {
 		},
 
 		messag: null,
-	}
+	},
+	gameStages = {
+		waiting: "Waiting",
+		ready: "Ready",
+		round: "Round",
+		pause: "Pause",
+		endRound: "End round",
+		endGame: "End game"
+	},
+	gameTypes = {
+		opponents: "opponents",
+		friends: "friends"
+	};
 
-	//setInterval(function(){sendMessage(messages)},1000);
 function doKeyDown (e) {
 
 	if (e.keyCode === 65){ 
@@ -175,13 +186,14 @@ function doKeyDown (e) {
 	}
 
 	if(e.keyCode == 80) {
-		if(pause.state === false) pause.state=true;
-		 else pause.state = false;
+		messages.messag = "pause";
+		sendMessage(messages);
 	}
 
 	if (e.keyCode == 82) {
-		key.restart = true;
-		game.stage = gameStages.round;
+		messages.game.stage = gameStages.round;
+		messages.messag = "restart";
+		sendMessage(messages);
 	}
 
 	if (e.keyCode === 67) {
@@ -198,7 +210,11 @@ function doKeyDown (e) {
 
 function doKeyUp (e) {
 
-		if (e.keyCode === 65) messages.paddle.move = false; 
-		 else if (e.keyCode === 68) messages.paddle.move = false;
-		sendMessage(messages);
+		if (e.keyCode === 65) {
+			messages.paddle.move = false; 
+			sendMessage(messages);
+		}else if (e.keyCode === 68){
+			messages.paddle.move = false;
+			sendMessage(messages);
+		}
 }

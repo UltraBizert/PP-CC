@@ -29,6 +29,7 @@ function Playground (context) {
 
 		case "Pause":
 			pause(this.context);
+			console.log("game on pause");
 		break;
 		}
 	}
