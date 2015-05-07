@@ -10,10 +10,32 @@ canvas {
 	width: 100%;
 }
 
-#ground {
+#all {
 	height: 100%;
-	width: 100%; 
-	overflow: hidden; 
+	width: 100%;
+}
+
+#ground{
+	display: block;
+	height: 100%;
+	width: 79%;
+}
+
+#menu {
+	display: none;
+	height:100%;
+	width:20%;
+	background-color: red;
+}
+
+.game{
+	height: 100%;
+	width: 100%;
+}
+
+.wait{
+	height:100%;
+	width: 70%;
 }
 
 #loading{

@@ -9,31 +9,47 @@ function Playground (context) {
 	}
 
 	this.draw = function () {
+
 		this.context.fillStyle = '#272';
 		this.context.fillRect(0,0,W,H);
+
 		this.p1.draw(this.context);
 		this.p2.draw(this.context);
 		this.ball.draw(this.context);
 
-		updateScore(this.context, this.game.type, this.p1, this.p2, this.ball.score);
-		gameOver(this.context, this.game, this.ball, this.p1, this.p2);
+		updateScore(this.context, this.game, this.p1, this.p2, this.ball.score);
+		// gameOver(this.context, this.game, this.ball, this.p1, this.p2);
 	};
 
 	this.main = function (gameStage) {
+
 		switch (gameStage){
 
+		case "Ready":
+			console.log("ready");
+			ready(this.context, this.p1, this.p2);
+		break;
+
 		case "Round":
+			start();
 			this.ball.move();
 			checkCollides(this.ball, this.p1, this.p2);
 			this.draw();
 		break;
 
 		case "Pause":
+			stop(requestId);
 			pause(this.context);
 			console.log("game on pause");
 		break;
+
+		case "End game":
+			stop(requestId);
+			gameOver(this.context);
+		break;
 		}
-	}
+	};
+
 }
 
 function createBall () {
@@ -146,48 +162,51 @@ function collideAction(ball, p) {
 	}
 }
 
-function updateScore(context, gameType, paddle1, paddle2, score) {
-	context.fillStyle = "white";
-	context.font = "16px Arial, sans-serif";
-	context.textAlign = "left";
-	context.textBaseline = "top";
+function updateScore(context, game, paddle1, paddle2, score) {
 
-	if(gameType == 'opponents'){
+	textStyle(context, 16, "white");
+
+	if(game.type == 'opponents'){
 		context.fillText( paddle2.score, W/2, H/2-paddle2.y/4 );
 		context.fillText( paddle1.score, W/2, H/2+paddle2.y/4 );
-	} else if (gameType == 'friends') {
+		if(paddle1.score>=10 || paddle2.score>=10) game.stage = "End game";
+	} else if (game.type == 'friends') {
 		context.fillText( score, W/2, H/2);
+		if (paddle1.score!=0 || paddle2.score!=0) game.stage = "End game";
 	}
 }
 
 function pause (context) {
-	context.fillStyle = "white";
-	context.font = "46px Arial, sans-serif";
-	context.textAlign = "left";
-	context.textBaseline = "top";
-
+	textStyle(context, 46, "#666")
 	context.fillText("Game on pause", W/2-W/20, H/2);
 }
 
-function gameOver (context, game, ball, paddle1,paddle2) {
+function gameOver (context) {
 
-	if(game.type == "opponents" && ((paddle1.score>=10) || (paddle2.score>=10))) {
-		game.stage = "End game";
-		this.draw(context);
-	} else if (game.type == "friends" && (paddle1.score!=0) || (paddle2.score!=0)) {
-		game.stage = "End game";
-		this.draw(context);
-	}
+	context.fillStyle = '#272';
+	context.fillRect(0,0,W,H);
 
-	this.draw = function (context) {
-		context.font = "66px Arial, sans-serif";
-		context.textAlign = "left";
-		context.textBaseline = "top";
-		context.fillStyle = '#272';
-		context.fillRect(0,0,W,H);
-		context.fillStyle = "red";
-		context.fillText("GAME OVER", W/2-W/10, H/2-H/20);
-	}
+	textStyle(context, 66, "red");
+	context.fillText("GAME OVER", W/2-W/10, H/2-H/20);
+}
+
+function ready (context, p1, p2) {
+
+	context.fillStyle = '#272';
+	context.fillRect(0,0,W,H);
+
+	p1.draw(context);
+	p2.draw(context);
+
+	textStyle(context, 66, "#345");
+	context.fillText("Press ready to start the game", W/2-400, H/2-H/20);
+}
+
+function textStyle(context, size, color) {
+	context.font = size+"px Arial, sans-serif";
+	context.textAlign = "left";
+	context.textBaseline = "top";
+	context.fillStyle = color;
 }
 
 function random () {

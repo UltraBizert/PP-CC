@@ -8,8 +8,15 @@
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <link type="text/javascript" href="js/PP.js">
 <link type="text/javascript" href="js/receiver.js">
+<div id="all">
+	<div id="menu">
+		afdgadfg
+	</div>
 
-	<canvas id = "playground"></canvas>
+	<div id="ground" class="wait">
+		<canvas id = "playground"></canvas>
+	</div>
+</div>
 
 <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script> 
 <script src="js/PP.js"></script>
@@ -34,8 +41,9 @@
 	pg = new Playground(ctx);
 	paddles.push(new Paddle(1));
 	paddles.push(new Paddle(2));
-
+	console.log(game);
 	pg.init(paddles[0], paddles[1], ball, game);
+	pg.main(game.stage);
 	}
 
 	function animate(time) {
@@ -74,8 +82,8 @@
 		}
 
 		if(e.keyCode == 80) {
-			if(game.stage === "Pause") {start(); game.stage="Round";}
-			else {stop(requestId); game.stage = "Pause";}
+			if(game.stage === "Pause") game.stage="Round";
+			else game.stage = "Pause";
 		}
 
 		if (e.keyCode == 82) {
@@ -92,11 +100,26 @@
 			messages.messag = "game";
 			sendMessage(messages);
 		}
+
+		if(e.keyCode === 77) {
+			toggle();
+		}
 	}
 
 	function doKeyUp (e) {
 
 	}
+
+	function toggle() {
+		var ele = document.getElementById("menu");
+
+		if(ele.style.display == "block") {
+				ele.style.display = "none";
+		}
+		else {
+			ele.style.display = "block";
+		}
+	} 
 
 </script>
 

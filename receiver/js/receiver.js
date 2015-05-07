@@ -13,18 +13,18 @@ var canvas = document.getElementById("playground"),
 		round: "Round",
 		pause: "Pause",
 		endRound: "End round",
-		endGame: "End game"
+		endGame: "End game",
 	},
 	gameTypes = {
 		opponents: "opponents",
-		friends: "friends"
+		friends: "friends",
 	},
 	game = {
 		type: gameTypes.friends,
-		stage: gameStages.round,
+		stage: gameStages.ready,
 	};
 
-window.onload = function() {
+/*window.onload = function() {
 
 canvas.width = W;
 canvas.height = H;
@@ -111,7 +111,7 @@ canvas.height = H;
 	// initialize the CastReceiverManager with an application status message
 	window.castReceiverManager.start({statusText: "Application is starting"});
 	// console.log(event.data);
-};
+};*/
 
 function Player (senderID, number) {
 	this.id = senderID || undefined;

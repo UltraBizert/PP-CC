@@ -145,17 +145,14 @@ window.addEventListener("keydown", doKeyDown, false);
 window.addEventListener("keyup", doKeyUp, false);
 
 var messages = { 
-
 		game: {
 			stage: null,
 			type: null,
 		},
-
 		paddle: {
 			move: false,
 			direction: null,
 		},
-
 		messag: null,
 	},
 	gameStages = {
