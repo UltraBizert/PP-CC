@@ -21,7 +21,7 @@ var canvas = document.getElementById("playground"),
 	},
 	game = {
 		type: gameTypes.friends,
-		stage: gameStages.ready,
+		stage: gameStages.pause,
 	};
 
 /*window.onload = function() {

@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html>
 <title>Ping-Pong</title>
 
 <meta charset="UTF-8">
@@ -10,10 +9,10 @@
 <link type="text/javascript" href="js/receiver.js">
 <div id="all">
 	<div id="menu">
-		afdgadfg
+	
 	</div>
 
-	<div id="ground" class="wait">
+	<div id="ground">
 		<canvas id = "playground"></canvas>
 	</div>
 </div>
@@ -43,7 +42,6 @@
 	paddles.push(new Paddle(2));
 	console.log(game);
 	pg.init(paddles[0], paddles[1], ball, game);
-	pg.main(game.stage);
 	}
 
 	function animate(time) {
@@ -82,8 +80,11 @@
 		}
 
 		if(e.keyCode == 80) {
-			if(game.stage === "Pause") game.stage="Round";
-			else game.stage = "Pause";
+			console.log(game.stage);
+			if(game.stage === "Pause") {
+				game.stage="Round";
+				start();
+			}else game.stage = "Pause";
 		}
 
 		if (e.keyCode == 82) {
@@ -113,14 +114,12 @@
 	function toggle() {
 		var ele = document.getElementById("menu");
 
-		if(ele.style.display == "block") {
+		if(ele.style.display == "inline-block") {
 				ele.style.display = "none";
 		}
 		else {
-			ele.style.display = "block";
+			ele.style.display = "inline-block";
 		}
 	} 
 
 </script>
-
-</html>

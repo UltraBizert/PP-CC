@@ -22,7 +22,7 @@ function Playground (context) {
 	};
 
 	this.main = function (gameStage) {
-
+		console.log(gameStage);
 		switch (gameStage){
 
 		case "Ready":
@@ -31,7 +31,6 @@ function Playground (context) {
 		break;
 
 		case "Round":
-			start();
 			this.ball.move();
 			checkCollides(this.ball, this.p1, this.p2);
 			this.draw();
@@ -169,10 +168,10 @@ function updateScore(context, game, paddle1, paddle2, score) {
 	if(game.type == 'opponents'){
 		context.fillText( paddle2.score, W/2, H/2-paddle2.y/4 );
 		context.fillText( paddle1.score, W/2, H/2+paddle2.y/4 );
-		if(paddle1.score>=10 || paddle2.score>=10) game.stage = "End game";
+		// if(paddle1.score>=10 || paddle2.score>=10) game.stage = "End game";
 	} else if (game.type == 'friends') {
 		context.fillText( score, W/2, H/2);
-		if (paddle1.score!=0 || paddle2.score!=0) game.stage = "End game";
+		// if (paddle1.score!=0 || paddle2.score!=0) game.stage = "End game";
 	}
 }
 
