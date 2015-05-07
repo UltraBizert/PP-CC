@@ -6,6 +6,7 @@ var canvas = document.getElementById("playground"),
 	paddles = [],
 	ball = {},
 	init,
+	requestId = 0,
 	gameStages = {
 		waiting: "Waiting",
 		ready: "Ready",
@@ -25,40 +26,29 @@ var canvas = document.getElementById("playground"),
 
 window.onload = function() {
 
-var animation = function () {
-	if(init) cancelRequestAnimFrame(init);
-	init = requestAnimFrame(animation);
-	this.pg.main();
-	this.pg.draw();
-};
-
-ctx.font = "18px Arial, sans-serif";
-ctx.textAlign = "center";
-ctx.textBaseline = "middle";
-
 canvas.width = W;
 canvas.height = H;
 
 
-	/*cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
+	cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
 	window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
-	console.log('Starting Receiver Manager');
+	// console.log('Starting Receiver Manager');
 	
 	// handler for the 'ready' event
 	castReceiverManager.onReady = function(event) {
-		console.log('Received Ready event: ' + JSON.stringify(event.data));
+		// console.log('Received Ready event: ' + JSON.stringify(event.data));
 		window.castReceiverManager.setApplicationState("Application status is ready...");
 	};
 	
 	// handler for 'senderconnected' event
 	castReceiverManager.onSenderConnected = function(event) {
-		console.log('Received Sender Connected event: ' + event.data);
-		console.log(window.castReceiverManager.getSender(event.data).userAgent);
+		// console.log('Received Sender Connected event: ' + event.data);
+		// console.log(window.castReceiverManager.getSender(event.data).userAgent);
 	};
 	
 	// handler for 'senderdisconnected' event
 	castReceiverManager.onSenderDisconnected = function(event) {
-		console.log('Received Sender Disconnected event: ' + event.data);
+		// console.log('Received Sender Disconnected event: ' + event.data);
 		if (window.castReceiverManager.getSenders().length == 0) {
 			window.close();
 		}
@@ -66,8 +56,8 @@ canvas.height = H;
 	
 	// handler for 'systemvolumechanged' event
 	castReceiverManager.onSystemVolumeChanged = function(event) {
-		console.log('Received System Volume Changed event: ' + event.data['level'] + ' ' +
-				event.data['muted']);
+		// console.log('Received System Volume Changed event: ' + event.data['level'] + ' ' +
+				// event.data['muted']);
 	};
 
 	// create a CastMessageBus to handle messages for a custom namespace
@@ -96,7 +86,7 @@ canvas.height = H;
 				ball = new createBall();
 				pg = new Playground(ctx);
 				pg.init(players[0].paddle, players[1].paddle, ball, game);
-				animation(pg);
+				animate();
 			}else window.messageBus.send(event.senderId, "Waiting player two");
 			break;
 			case "move":
@@ -105,6 +95,10 @@ canvas.height = H;
 				} else if(event.senderId == players[1].id){
 					players[1].paddle.move(data.paddle);
 				} 
+			break;
+			case "pause":
+				if(game.stage !== gameStages.pause) game.stage=gameStages.pause;
+				 else game.stage = gameStages.round;
 			break;
 		}
 
@@ -116,12 +110,26 @@ canvas.height = H;
 
 	// initialize the CastReceiverManager with an application status message
 	window.castReceiverManager.start({statusText: "Application is starting"});
-	console.log(event.data);*/
+	// console.log(event.data);
 };
 
 function Player (senderID, number) {
 	this.id = senderID || undefined;
 	this.number = number || null;
-	this.paddle = new createPaddle(number);
+	this.paddle = new Paddle(number);
 	this.score = 0;
+}
+
+function animate(time) {
+	requestId = window.requestAnimationFrame(animate);
+	pg.main(game.stage);
+}
+function start() {
+	animationStartTime = Date.now();
+	requestId = window.requestAnimationFrame(animate);
+}
+function stop() {
+	if (requestId)
+	window.cancelAnimationFrame(requestId);
+	requestId = 0;
 }
