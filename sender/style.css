@@ -1,3 +1,13 @@
-button {
-	
+body {
+	background-color:#FF0014;
 }
+.myDiv {
+	background-color:#686381;
+	margin: 5px 5px 5px 5px;
+	border-radius: 5px;
+}
+.row {
+	margin: 5px;
+	background-color:#EBC830;
+}
+
