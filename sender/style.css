@@ -1,13 +1,25 @@
 body {
 	background-color:#FF0014;
-}
-.myDiv {
-	background-color:#686381;
-	margin: 5px 5px 5px 5px;
-	border-radius: 5px;
-}
-.row {
-	margin: 5px;
-	background-color:#EBC830;
+	background-image: url(http://t0.gstatic.com/images?q=tbn:ANd9GcTRnVP1NmYKN6mkiIK6tDi4jIWZLzIFWqthweAuYBvK2QzS_DIk);
 }
 
+.row {
+	margin: 5px;
+}
+
+.main {
+	position: fixed;
+	background-color: rgba(0, 120, 201, 0.7);
+	box-shadow: inset 0px 0px 15px 7px rgba(256,10,0,0.6);
+	margin: 30px 30px;
+	height: 90%;
+	width:80%;
+}
+
+.help {
+
+}
+
+.btn {
+
+}

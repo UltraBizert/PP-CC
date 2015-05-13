@@ -136,10 +136,10 @@ function update() {
 /**
  * handler for the transcribed text from the speech input
  * @param {string} words A transcibed speech string
- */
+ 
 function transcribe(words) {
 	sendMessage(words);
-}
+}*/
 
 window.addEventListener("keydown", doKeyDown, false);
 window.addEventListener("keyup", doKeyUp, false);
@@ -214,4 +214,9 @@ function doKeyUp (e) {
 			messages.paddle.move = false;
 			sendMessage(messages);
 		}
+}
+
+function connection () {
+	messages.messag = "connect";
+	sendMessage(messages);
 }
