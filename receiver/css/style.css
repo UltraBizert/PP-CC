@@ -28,6 +28,6 @@ canvas {
 	height:100%;
 	width:20%;
 	background-color: red;
-	display: none;
+	/*display: none;*/
 	position: relative;
 }

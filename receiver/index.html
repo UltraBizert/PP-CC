@@ -9,7 +9,6 @@
 <link type="text/javascript" href="js/receiver.js">
 <div id="all">
 	<div id="menu">
-	
 	</div>
 
 	<div id="ground">
@@ -32,6 +31,8 @@
 	window.addEventListener("keyup", doKeyUp, false);
 
 	window.onload = function () {
+
+	document.querySelector('#menu').style.display = "none";
 
 	canvas.width = W;
 	canvas.height = H;
