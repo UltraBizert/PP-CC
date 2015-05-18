@@ -9,34 +9,42 @@
 
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="style.css" rel="stylesheet">
+		<link rel="import" href="main.html">
 	</head>
-	<body>
-		<div class="container-fluid">
-			<div class="col-md-11">
-				<div class="row main">
-					<div class="col-md-12">
-						<p class="lead">
-							<ul>
-								<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque aliquid, voluptates eius vitae repellat soluta, dolores optio nemo, veniam nulla recusandae eveniet laborum, tempora quaerat reprehenderit minima. Inventore, ex, sint!</li>
-								<li>Eligendi atque aperiam itaque mollitia deserunt non delectus ipsum vel, voluptas, laborum dignissimos illo autem natus nisi est, aliquam quo! Aliquam dignissimos, iusto rem. Cumque, eveniet, hic. Illum, facilis, incidunt.</li>
-								<li>Quam quasi sit nulla animi enim illum similique cum corrupti, dolore deleniti aliquid doloribus ipsum placeat impedit dolorem ipsam et numquam sunt accusantium? Quos consequuntur, voluptas consectetur quis labore error.</li>
-							</ul>
-						</p>
-					</div>
+	<body onload="connection();">
+		<div class="container-fluid" id="major">
+			<div class="row pull-right">
+				<div class="col-md-2 col-sm-2 col-xs-2">
+					<button onclick = "connection();" type="button" class="btn btn-success center-block con">
+						Connect
+					</button>
 				</div>
 			</div>
-			<div class="col-md-1">
-				<div class="row">
-					<div class="col-md-1 connect">
-						<button onclick = "connection();" type="button" class="btn btn-success">Connect</button>
-					</div>
+			<div class="row ">
+				<div class="col-md-10 col-sm-10 col-xs-10">
+						<div class="col-md-12 help">
+							<p class="lead">
+								<ul>
+									<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque aliquid, voluptates eius vitae repellat soluta, dolores optio nemo, veniam nulla recusandae eveniet laborum, tempora quaerat reprehenderit minima. Inventore, ex, sint!</li>
+									<li>Eligendi atque aperiam itaque mollitia deserunt non delectus ipsum vel, voluptas, laborum dignissimos illo autem natus nisi est, aliquam quo! Aliquam dignissimos, iusto rem. Cumque, eveniet, hic. Illum, facilis, incidunt.</li>
+									<li>Quam quasi sit nulla animi enim illum similique cum corrupti, dolore deleniti aliquid doloribus ipsum placeat impedit dolorem ipsam et numquam sunt accusantium? Quos consequuntur, voluptas consectetur quis labore error.</li>
+								</ul>
+							</p>
+						</div>
 				</div>
 			</div>
 		</div>
 	</body>
 
-	<script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+	var link = document.querySelector('link[rel=import]');
+	var content = link.import.querySelector('#main');
+
+
+</script>
+
+	<script src="https://www.gsltatic.com/cv/js/sender/v1/cast_sender.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="sender.js"></script>
+	<script src="js/sender.js"></script>
 </html>

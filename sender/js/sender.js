@@ -217,6 +217,9 @@ function doKeyUp (e) {
 }
 
 function connection () {
-	messages.messag = "connect";
-	sendMessage(messages);
+	// messages.messag = "connect";
+	// sendMessage(messages);
+	document.querySelector('#major').style.display = "none";
+
+	document.body.appendChild(content.cloneNode(true));
 }
