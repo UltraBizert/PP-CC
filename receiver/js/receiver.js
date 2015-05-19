@@ -21,10 +21,14 @@ var canvas = document.getElementById("playground"),
 	},
 	game = {
 		type: gameTypes.friends,
-		stage: gameStages.pause,
+		stage: null,
+	},
+	messages = {
+		game:null,
+		message:null,
 	};
 
-/*window.onload = function() {
+window.onload = function() {
 
 canvas.width = W;
 canvas.height = H;
@@ -44,6 +48,7 @@ canvas.height = H;
 	castReceiverManager.onSenderConnected = function(event) {
 		// console.log('Received Sender Connected event: ' + event.data);
 		// console.log(window.castReceiverManager.getSender(event.data).userAgent);
+		startScreen(ctx);
 	};
 	
 	// handler for 'senderdisconnected' event
@@ -75,11 +80,21 @@ canvas.height = H;
 			case "connect":
 				if(players[0] === undefined) {
 					players.push(new Player(event.senderId, 1));
-					window.messageBus.send(event.senderId, "You connected like player 1" );
+					game.stage = gameStages.waiting;
+					messages.paddle = "top";
+					messages.score = 0;
+					messages.game = game;
+					messages.message = "You connected like player 1";
+					window.messageBus.send(event.senderId, JSON.stringify(messages));
 				}else if (players[1] === undefined && event.senderId !== players[0].id){
-				 players.push(new Player(event.senderId, 2));
-				 window.messageBus.send(event.senderId, "You connected like player 2" );
-				}else window.messageBus.send(event.senderId, "Game full" );
+					players.push(new Player(event.senderId, 2));
+					game.stage = gameStages.ready;
+					messages.paddle = "bottom";
+					messages.score = 0;
+					messages.game = game;
+					messages.message = "You connected like player 2";
+					window.messageBus.send(event.senderId, JSON.stringify(messages));
+				}else window.messageBus.send(event.senderId, JSON.stringify("Game full"));
 			break;
 			case "game":
 			if(players[1] !== undefined) {
@@ -87,18 +102,20 @@ canvas.height = H;
 				pg = new Playground(ctx);
 				pg.init(players[0].paddle, players[1].paddle, ball, game);
 				animate();
-			}else window.messageBus.send(event.senderId, "Waiting player two");
+			}else window.messageBus.send(event.senderId, JSON.stringify("Waiting player two"));
 			break;
 			case "move":
-				if(event.senderId == players[0].id){
-					players[0].paddle.move(data.paddle);
-				} else if(event.senderId == players[1].id){
-					players[1].paddle.move(data.paddle);
-				} 
+				if(game.stage == gameStages.round){
+					if(event.senderId == players[0].id){
+						players[0].paddle.move(data.paddle);
+					} else if(event.senderId == players[1].id){
+						players[1].paddle.move(data.paddle);
+					}
+				}
 			break;
 			case "pause":
-				if(game.stage !== gameStages.pause) game.stage=gameStages.pause;
-				 else game.stage = gameStages.round;
+				if(game.stage === gameStages.round) game.stage=gameStages.pause;
+				 else if(game.stage === gameStages.pause) game.stage = gameStages.round;
 			break;
 		}
 
@@ -111,7 +128,7 @@ canvas.height = H;
 	// initialize the CastReceiverManager with an application status message
 	window.castReceiverManager.start({statusText: "Application is starting"});
 	// console.log(event.data);
-};*/
+};
 
 function Player (senderID, number) {
 	this.id = senderID || undefined;

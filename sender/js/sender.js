@@ -1,3 +1,30 @@
+window.addEventListener("keydown", doKeyDown, false);
+window.addEventListener("keyup", doKeyUp, false);
+
+var	game=  {
+		stage: null,
+		type: null,
+	},
+	messages = { 
+		paddle: {
+			move: false,
+			direction: null,
+		},
+		messag: null,
+	},
+	gameStages = {
+		waiting: "Waiting",
+		ready: "Ready",
+		round: "Round",
+		pause: "Pause",
+		endRound: "End round",
+		endGame: "End game"
+	},
+	gameTypes = {
+		opponents: "opponents",
+		friends: "friends"
+	};
+
 var applicationID = '664F7F25';
 var namespace = 'urn:x-cast:ping-pong';
 var session = null;
@@ -25,37 +52,38 @@ function initializeCastApi() {
  * initialization success callback
  */
 function onInitSuccess() {
-	appendMessage("onInitSuccess");
+	console.log("onInitSuccess");
 }
 
 /**
  * initialization error callback
  */
 function onError(message) {
-	appendMessage("onError: "+JSON.stringify(message));
+	console.log("onError: "+JSON.stringify(message));
 }
 
 /**
  * generic success callback
  */
 function onSuccess(message) {
-	appendMessage("onSuccess: "+message);
+	// console.log("onSuccess: "+message);
+	console.log('this');
 }
 
 /**
  * callback on success for stopping app
  */
 function onStopAppSuccess() {
-	appendMessage('onStopAppSuccess');
+	console.log('onStopAppSuccess');
 }
 
 /**
  * session listener during initialization
  */
 function sessionListener(e) {
-	appendMessage('New session ID:' + e.sessionId);
+	console.log('New session ID:' + e.sessionId);
 	session = e;
-	session.addUpdateListener(sessionUpdateListener);  
+	session.addUpdateListener(sessionUpdateListener);
 	session.addMessageListener(namespace, receiverMessage);
 }
 
@@ -65,7 +93,7 @@ function sessionListener(e) {
 function sessionUpdateListener(isAlive) {
 	var message = isAlive ? 'Session Updated' : 'Session Removed';
 	message += ': ' + session.sessionId;
-	appendMessage(message);
+	console.log(message);
 	if (!isAlive) {
 		session = null;
 	}
@@ -77,20 +105,33 @@ function sessionUpdateListener(isAlive) {
  * @param {string} message A message string
  */
 function receiverMessage(namespace, message) {
-	appendMessage("receiverMessage: "+namespace+", "+message);
-	console.log(message);
+	console.log("receiverMessage: "+namespace+", "+message);
+	message = JSON.parse(message);
+	game = message.game;
+	console.log(game);
+
+	if(game.stage != null)
+	{
+		document.querySelector('#major').style.display = "none";
+		document.body.appendChild(content.cloneNode(true));
+		document.querySelector('#stage').innerHTML=game.stage;
+		document.querySelector('#type').innerHTML=game.type;
+		document.querySelector('#score').innerHTML=message.score;
+		document.querySelector('#paddle').innerHTML=message.paddle;
+	}
 };
 
 /**
  * receiver listener during initialization
  */
 function receiverListener(e) {
-	if( e === 'available' ) {
-		appendMessage("receiver found");
+	if( e === chrome.cast.ReceiverAvailability.AVAILABLE) {
+		console.log("receiver found");
 	}
 	else {
-		appendMessage("receiver list empty");
+		console.log("receiver list empty");
 	}
+
 }
 
 /**
@@ -106,7 +147,7 @@ function stopApp() {
  * @param {string} message A message string
  */
 function sendMessage(message) {
-	console.log(message.messag);
+	console.log(message);
 	if (session!=null) {
 		session.sendMessage(namespace, message, onSuccess.bind(this, "Message sent: " + message), onError);
 	}
@@ -122,9 +163,9 @@ function sendMessage(message) {
  * append message to debug message window
  * @param {string} message A message string
  */
-function appendMessage(message) {
-	console.log(message);
-};
+// function console.log(message) {
+// 	console.log(JSON.parse(message));
+// };
 
 /**
  * utility function to handle text typed in by user in the input field
@@ -141,32 +182,6 @@ function transcribe(words) {
 	sendMessage(words);
 }*/
 
-window.addEventListener("keydown", doKeyDown, false);
-window.addEventListener("keyup", doKeyUp, false);
-
-var messages = { 
-		game: {
-			stage: null,
-			type: null,
-		},
-		paddle: {
-			move: false,
-			direction: null,
-		},
-		messag: null,
-	},
-	gameStages = {
-		waiting: "Waiting",
-		ready: "Ready",
-		round: "Round",
-		pause: "Pause",
-		endRound: "End round",
-		endGame: "End game"
-	},
-	gameTypes = {
-		opponents: "opponents",
-		friends: "friends"
-	};
 
 function doKeyDown (e) {
 
@@ -217,9 +232,33 @@ function doKeyUp (e) {
 }
 
 function connection () {
-	// messages.messag = "connect";
-	// sendMessage(messages);
-	document.querySelector('#major').style.display = "none";
+	if(session !== null) {
+		messages.messag = "connect";
+		sendMessage(messages);
 
-	document.body.appendChild(content.cloneNode(true));
+	} else alert("Select chromecast");
+}
+
+function left () {
+	messages.paddle.move = true;
+	messages.paddle.direction = "left";
+	messages.messag = "move";
+	sendMessage(messages);
+}
+
+function right () {
+	messages.paddle.move = true;
+	messages.paddle.direction = "right";
+	messages.messag = "move";
+	sendMessage(messages);
+}
+
+function pause () {
+	messages.messag = "pause";
+	sendMessage(messages);
+}
+
+function start (){
+	messages.messag = "game";
+	sendMessage(messages);
 }

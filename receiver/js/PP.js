@@ -18,7 +18,6 @@ function Playground (context) {
 		this.ball.draw(this.context);
 
 		updateScore(this.context, this.game, this.p1, this.p2, this.ball.score);
-		// gameOver(this.context, this.game, this.ball, this.p1, this.p2);
 	};
 
 	this.main = function (gameStage) {
@@ -168,10 +167,10 @@ function updateScore(context, game, paddle1, paddle2, score) {
 	if(game.type == 'opponents'){
 		context.fillText( paddle2.score, W/2, H/2-paddle2.y/4 );
 		context.fillText( paddle1.score, W/2, H/2+paddle2.y/4 );
-		// if(paddle1.score>=10 || paddle2.score>=10) game.stage = "End game";
+		if(paddle1.score>=10 || paddle2.score>=10) game.stage = "End game";
 	} else if (game.type == 'friends') {
 		context.fillText( score, W/2, H/2);
-		// if (paddle1.score!=0 || paddle2.score!=0) game.stage = "End game";
+		if (paddle1.score!=0 || paddle2.score!=0) game.stage = "End game";
 	}
 }
 
@@ -199,6 +198,15 @@ function ready (context, p1, p2) {
 
 	textStyle(context, 66, "#345");
 	context.fillText("Press ready to start the game", W/2-400, H/2-H/20);
+}
+
+function startScreen (context) {
+	context.fillStyle = '#272';
+	context.fillRect(0,0,W,H);
+
+	textStyle(context, 66, "#345");
+	context.fillText("PING-PONG", W/2-400, H/2-H/20);
+	console.log('it work');
 }
 
 function textStyle(context, size, color) {
