@@ -6,6 +6,9 @@ function Playground (context) {
 		this.p2 = paddle2 || [];
 		this.ball = ball || {};
 		this.game = game || {};
+
+		this.p1.score = 0;
+		this.p2.score = 0;
 	}
 
 	this.draw = function () {
@@ -32,7 +35,7 @@ function Playground (context) {
 		case "Round":
 			this.ball.move();
 			checkCollides(this.ball, this.p1, this.p2);
-			this.draw();
+			this.draw();			
 		break;
 
 		case "Pause":

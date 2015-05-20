@@ -118,6 +118,9 @@ function receiverMessage(namespace, message) {
 		document.querySelector('#type').innerHTML=game.type;
 		document.querySelector('#score').innerHTML=message.score;
 		document.querySelector('#paddle').innerHTML=message.paddle;
+	} else {
+		document.querySelector('#major').style.display = "block";
+		document.querySelector('#main').style.display = "none";
 	}
 };
 
@@ -260,5 +263,15 @@ function pause () {
 
 function start (){
 	messages.messag = "game";
+	sendMessage(messages);
+}
+
+function ready () {
+	messages.messag = "ready";
+	sendMessage(messages);
+}
+
+function exit () {
+	messages.messag = "exit";
 	sendMessage(messages);
 }
