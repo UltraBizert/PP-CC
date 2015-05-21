@@ -35,7 +35,7 @@ function Playground (context) {
 		case "Round":
 			this.ball.move();
 			checkCollides(this.ball, this.p1, this.p2);
-			this.draw();			
+			this.draw();
 		break;
 
 		case "Pause":
@@ -57,7 +57,7 @@ function createBall () {
 
 	this.x = W/2,
 	this.y = H/2, 
-	this.r = 5,
+	this.r = H/20,
 	this.vx = W/300 * random(),
 	this.vy = H/100 * random();
 	this.score = 0;
@@ -78,10 +78,11 @@ function createBall () {
 
 function Paddle(pos) {
 
-	this.h = 10;
-	this.w = 200;
+	this.h = H/20;
+	this.w = W/5;
 	this.x = W/2-this.w/2;
 	this.y = (pos === 1) ? 0 : H-this.h;
+	this.position = (pos === 1) ? "top" : "bottom";
 	this.score = 0;
 
 	this.draw = function (context) {
@@ -191,6 +192,42 @@ function gameOver (context) {
 	context.fillText("GAME OVER", W/2-W/10, H/2-H/20);
 }
 
+function waiting (context, p1, p2) {
+
+	context.fillStyle = '#272';
+	context.fillRect(0,0,W,H);
+
+	textStyle(context, 66, "#345");
+	context.fillText("PING-PONG", W/3, H/10);
+
+	textStyle(context, 40, "#345");
+
+	if (p1 == null) {
+		context.fillText("Ожидание первого игрока", W/10, H/4);
+	}
+
+	if (p2 == null) {
+		context.fillText("Ожидание второго игрока", W-W/2.2, H/4);
+	}
+
+	if (p1 == "connected") {
+		context.fillText("Первый игрок подключен", W/10, H/4);
+	}
+
+	if(p2 == "connected") {
+		context.fillText("Второй игрок подключен", W-W/2.2, H/4);
+	}
+
+	if (p1 == "ready") {
+		context.fillText("Первый игрок готов", W/10, H/4);
+	}
+
+	if (p2 == "ready") {
+		context.fillText("Второй игрок готов", W-W/2.2, H/4);
+	}
+
+}
+
 function ready (context, p1, p2) {
 
 	context.fillStyle = '#272';
@@ -203,12 +240,12 @@ function ready (context, p1, p2) {
 	context.fillText("Press ready to start the game", W/2-400, H/2-H/20);
 }
 
-function startScreen (context) {
+function startScreen (context, p1, p2) {
 	context.fillStyle = '#272';
 	context.fillRect(0,0,W,H);
 
 	textStyle(context, 66, "#345");
-	context.fillText("PING-PONG", W/2-400, H/2-H/20);
+	context.fillText("PING-PONG", W/3, H/10);
 	console.log('it work');
 }
 

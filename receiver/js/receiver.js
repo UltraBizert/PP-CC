@@ -28,9 +28,14 @@ var canvas = document.getElementById("playground"),
 		type: gameTypes.friends,
 		stage: null,
 	},
-	messages = {
+	mBus = {
 		game:null,
+		player1:null,
+		player2:null,
 		message:null,
+		update: function () {
+
+		}
 	};
 
 window.onload = function() {
@@ -56,7 +61,9 @@ players.push( new Player(null, 2));
 	castReceiverManager.onSenderConnected = function(event) {
 		// console.log('Received Sender Connected event: ' + event.data);
 		// console.log(window.castReceiverManager.getSender(event.data).userAgent);
-		startScreen(ctx);
+		if (window.castReceiverManager.getSenders().length == 1) {
+			startScreen(ctx);
+		}
 	};
 	
 	// handler for 'senderdisconnected' event
@@ -73,7 +80,7 @@ players.push( new Player(null, 2));
 				// event.data['muted']);
 	};
 
-	// create a CastMessageBus to handle messages for a custom namespace
+	// create a CastMessageBus to handle mBus for a custom namespace
 	window.messageBus =
 		window.castReceiverManager.getCastMessageBus('urn:x-cast:ping-pong');
 
@@ -88,29 +95,43 @@ players.push( new Player(null, 2));
 		switch(data.messag) {
 			case "connect":
 				if(players[0].id === null) {
+
 					players[0] = new Player(event.senderId, 1);
+					players[0].state = "connected";
+
 					game.stage = gameStages.waiting;
-					messages.paddle = "top";
-					messages.score = 0;
-					messages.game = game;
-					messages.message = "You connected like player 1";
-					window.messageBus.send(event.senderId, JSON.stringify(messages));
+					waiting(ctx, players[0].state, players[1].state);
+
+					mBusUpdate("You connected like player 1", game, players[0]);
+					window.messageBus.send(event.senderId, JSON.stringify(mBus));
+
 				}else if (players[1].id === null && event.senderId !== players[0].id){
+
 					players[1] = new Player(event.senderId, 2);
+					players[1].state = "connected";
+
 					game.stage = gameStages.ready;
-					messages.paddle = "bottom";
-					messages.score = 0;
-					messages.game = game;
-					messages.message = "You connected like player 2";
-					window.messageBus.send(event.senderId, JSON.stringify(messages));
-				}else window.messageBus.send(event.senderId, JSON.stringify("Game full"));
+					waiting(ctx, players[0].state, players[1].state);
+
+					mBusUpdate("You connected like player 2", game, players[1]);
+					window.messageBus.send(event.senderId, JSON.stringify(mBus));
+
+				}else {
+
+					mBusUpdate("Game full", null, null);
+					window.messageBus.send(event.senderId, JSON.stringify(mBus));
+				}
+
 			break;
+
 			case "ready":
 				if(event.senderId === players[0].id) {
 					players[0].state = "ready";
+					waiting(ctx, players[0].state, players[1].state);
 					console.log("Player 1 ready");
 				} else if (event.senderId === players[1].id){
 					players[1].state = "ready";
+					waiting(ctx, players[0].state, players[1].state);
 					console.log("Player 2 ready");
 				}
 			break;
@@ -121,19 +142,19 @@ players.push( new Player(null, 2));
 					game.stage = gameStages.round;
 					pg.init(players[0].paddle, players[1].paddle, ball, game);
 					start();
-					messages.game = game;
+					mBus.game = game;
 					console.log("Game started");
 				}else {
-					console.log(messages.game.stage);
-					messages.message = "Waiting for confirmation of readiness players.";
-					window.messageBus.send(event.senderId, JSON.stringify(messages));
+					console.log(mBus.game.stage);
+					mBus.message = "Waiting for confirmation of readiness players.";
+					window.messageBus.send(event.senderId, JSON.stringify(mBus));
 				}
 			break;
 			case "move":
 				if(game.stage == gameStages.round){
 					if(event.senderId == players[0].id){
 						players[0].paddle.move(data.paddle);
-						console.log(players[0].paddle.x);					
+						console.log(players[0].paddle.x);
 					} else if(event.senderId == players[1].id){
 						players[1].paddle.move(data.paddle);
 						console.log(players[1].paddle.x);
@@ -142,39 +163,46 @@ players.push( new Player(null, 2));
 			break;
 			case "pause":
 				if(game.stage === gameStages.round) game.stage=gameStages.pause;
-				 else if(game.stage === gameStages.pause){
-				 	start();
-				  	game.stage = gameStages.round;
-				}
+					else if(game.stage === gameStages.pause){
+						start();
+						game.stage = gameStages.round;
+					}
 				console.log(game.stage);
 			break;
 			case "exit":
-				
+
 				if(event.senderId === players[0].id) {
-					messages.game.stage = null;
-					window.messageBus.send(event.senderId, JSON.stringify(messages));
+
+					mBus.game.stage = null;
+					window.messageBus.send(event.senderId, JSON.stringify(mBus));
+
 					game.stage = gameStages.waiting;
-					messages.game = game;
-					players[0].id = null;
-					players[0].state = null;
-					players[0].score = null;
-					players[0].paddle = null;
+
+					players[0].out();
+
 					console.log("Player 1 out");
-					if(players[1].id === null) window.close();
+
+					waiting(ctx, players[0].state, players[1].state);
+
+					if(players[1].id === null) window.close(); //close app
+
 				} else if (event.senderId === players[1].id){
-					messages.game.stage = null;
-					window.messageBus.send(event.senderId, JSON.stringify(messages));
+
+					mBus.game.stage = null;
+					window.messageBus.send(event.senderId, JSON.stringify(mBus));
+
 					game.stage = gameStages.waiting;
-					messages.game = game;
-					players[1].id = null;
-					players[1].state = null;
-					players[1].score = null;
-					players[1].paddle = null;
+
+					players[1].out();
 					console.log("Player 2 out");
-					if(players[0].id === null) window.close();
+
+					waiting(ctx, players[0].state, players[1].state);
+
+					if(players[0].id === null) window.close(); //close app
 				}
+
 			break;
-		}
+		}//end switch
 
 		console.log(players);
 		// inform all senders on the CastMessageBus of the incoming message event
@@ -191,8 +219,16 @@ function Player (senderID, number) {
 	this.id = senderID || null;
 	this.number = number || null;
 	this.paddle = new Paddle(number);
-	this.state = "connected";
+	this.state = null;
 	this.score = 0;
+
+	this.out = function () {
+		this.id = null;
+		this.number = null;
+		this.paddle = null;
+		this.state = null;
+		this.score = 0;
+	}
 }
 
 function animate(time) {
@@ -207,4 +243,10 @@ function stop() {
 	if (requestId)
 	window.cancelAnimationFrame(requestId);
 	requestId = 0;
+}
+
+function mBusUpdate (message, game, player) {
+	mBus.message = message;
+	mBus.game = game;
+	mBus.player = player;
 }

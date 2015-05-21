@@ -12,20 +12,20 @@ var	game=  {
 		},
 		messag: null,
 	},
-	gameStages = {
-		waiting: "Waiting",
-		ready: "Ready",
-		round: "Round",
-		pause: "Pause",
-		endRound: "End round",
-		endGame: "End game"
-	},
+	// gameStages = {
+	// 	waiting: "Waiting",
+	// 	ready: "Ready",
+	// 	round: "Round",
+	// 	pause: "Pause",
+	// 	endRound: "End round",
+	// 	endGame: "End game"
+	// },
 	gameTypes = {
 		opponents: "opponents",
 		friends: "friends"
 	};
 
-var applicationID = '664F7F25';
+var applicationID = '06A159A5';
 var namespace = 'urn:x-cast:ping-pong';
 var session = null;
 
@@ -108,16 +108,21 @@ function receiverMessage(namespace, message) {
 	console.log("receiverMessage: "+namespace+", "+message);
 	message = JSON.parse(message);
 	game = message.game;
+	player = message.player;
+
 	console.log(game);
 
 	if(game.stage != null)
 	{
 		document.querySelector('#major').style.display = "none";
-		document.body.appendChild(content.cloneNode(true));
-		document.querySelector('#stage').innerHTML=game.stage;
-		document.querySelector('#type').innerHTML=game.type;
-		document.querySelector('#score').innerHTML=message.score;
-		document.querySelector('#paddle').innerHTML=message.paddle;
+		if (document.querySelector('#main')){
+			document.querySelector('#main').style.display = "block";
+		} else {
+			document.body.appendChild(content.cloneNode(true));
+		}
+		document.querySelector('#stage').innerHTML = game.stage;
+		document.querySelector('#state').innerHTML = player.state;
+		document.querySelector('#paddle').innerHTML = player.paddle.position;
 	} else {
 		document.querySelector('#major').style.display = "block";
 		document.querySelector('#main').style.display = "none";
@@ -189,49 +194,38 @@ function transcribe(words) {
 function doKeyDown (e) {
 
 	if (e.keyCode === 65){ 
-		messages.paddle.move = true;
-		messages.paddle.direction = "left";
-		messages.messag = "move";
-		sendMessage(messages);
+		left();
 	}else if (e.keyCode === 68){
-		messages.paddle.move = true;
-		messages.paddle.direction = "right";
-		messages.messag = "move";
-		sendMessage(messages);
+		right();
 	}
 
 	if(e.keyCode == 80) {
-		messages.messag = "pause";
-		sendMessage(messages);
+		pause();
 	}
 
 	if (e.keyCode == 82) {
-		messages.game.stage = gameStages.round;
-		messages.messag = "restart";
-		sendMessage(messages);
+		//restart
 	}
 
 	if (e.keyCode === 67) {
-		messages.messag = "connect";
-		sendMessage(messages);
+		connection();
 	}
 
 	if(e.keyCode === 83) {
-		messages.messag = "game";
-		sendMessage(messages);
+		start();
 	}
 };
 
 
 function doKeyUp (e) {
 
-		if (e.keyCode === 65) {
-			messages.paddle.move = false; 
-			sendMessage(messages);
-		}else if (e.keyCode === 68){
-			messages.paddle.move = false;
-			sendMessage(messages);
-		}
+	if (e.keyCode === 65) {
+		messages.paddle.move = false;
+		sendMessage(messages);
+	}else if (e.keyCode === 68){
+		messages.paddle.move = false;
+		sendMessage(messages);
+	}
 }
 
 function connection () {
