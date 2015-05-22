@@ -47,6 +47,8 @@ function Playground (context) {
 		case "End game":
 			stop(requestId);
 			gameOver(this.context);
+
+			setTimeout(waiting(this.context, "ready", "ready"), 3000);
 		break;
 		}
 	};
@@ -57,7 +59,7 @@ function createBall () {
 
 	this.x = W/2,
 	this.y = H/2, 
-	this.r = H/20,
+	this.r = H/50,
 	this.vx = W/300 * random(),
 	this.vy = H/100 * random();
 	this.score = 0;
@@ -78,7 +80,7 @@ function createBall () {
 
 function Paddle(pos) {
 
-	this.h = H/20;
+	this.h = H/50;
 	this.w = W/5;
 	this.x = W/2-this.w/2;
 	this.y = (pos === 1) ? 0 : H-this.h;
@@ -166,7 +168,7 @@ function collideAction(ball, p) {
 
 function updateScore(context, game, paddle1, paddle2, score) {
 
-	textStyle(context, 16, "white");
+	textStyle(context, H/35, "white");
 
 	if(game.type == 'opponents'){
 		context.fillText( paddle2.score, W/2, H/2-paddle2.y/4 );
@@ -179,7 +181,7 @@ function updateScore(context, game, paddle1, paddle2, score) {
 }
 
 function pause (context) {
-	textStyle(context, 46, "#666")
+	textStyle(context, H/10, "#666")
 	context.fillText("Game on pause", W/2-W/20, H/2);
 }
 
@@ -188,7 +190,7 @@ function gameOver (context) {
 	context.fillStyle = '#272';
 	context.fillRect(0,0,W,H);
 
-	textStyle(context, 66, "red");
+	textStyle(context, H/10, "red");
 	context.fillText("GAME OVER", W/2-W/10, H/2-H/20);
 }
 
@@ -197,10 +199,10 @@ function waiting (context, p1, p2) {
 	context.fillStyle = '#272';
 	context.fillRect(0,0,W,H);
 
-	textStyle(context, 66, "#345");
+	textStyle(context, H/10, "#345");
 	context.fillText("PING-PONG", W/3, H/10);
 
-	textStyle(context, 40, "#345");
+	textStyle(context, H/20, "#345");
 
 	if (p1 == null) {
 		context.fillText("Ожидание первого игрока", W/10, H/4);
@@ -236,15 +238,30 @@ function ready (context, p1, p2) {
 	p1.draw(context);
 	p2.draw(context);
 
-	textStyle(context, 66, "#345");
-	context.fillText("Press ready to start the game", W/2-400, H/2-H/20);
+	textStyle(context, H/10, "#345");
+	context.fillText("Press ready to start the game", W/2-W/4, H/2-H/20);
+}
+
+function count (context) {
+	textStyle(context, H/10, "#5B5CE5");
+
+	setTimeout(function() {
+		context.fillText("3", W/3, H/3);
+	}, 1000);
+	setTimeout(function() {
+		context.fillText("2", W/3+W/10, H/3);
+	}, 2000);
+	setTimeout(function() {
+		context.fillText("1", W/3+W/5, H/3);
+	}, 3000);
+	return "ok";
 }
 
 function startScreen (context, p1, p2) {
 	context.fillStyle = '#272';
 	context.fillRect(0,0,W,H);
 
-	textStyle(context, 66, "#345");
+	textStyle(context, H/10, "#345");
 	context.fillText("PING-PONG", W/3, H/10);
 	console.log('it work');
 }

@@ -137,16 +137,23 @@ players.push( new Player(null, 2));
 			break;
 			case "game":
 				if(players[1].state === "ready" && players[0].state === "ready") {
+
 					ball = new createBall();
 					pg = new Playground(ctx);
+
 					game.stage = gameStages.round;
 					pg.init(players[0].paddle, players[1].paddle, ball, game);
+
 					start();
+
 					mBus.game = game;
+
 					console.log("Game started");
 				}else {
+
 					console.log(mBus.game.stage);
 					mBus.message = "Waiting for confirmation of readiness players.";
+
 					window.messageBus.send(event.senderId, JSON.stringify(mBus));
 				}
 			break;
@@ -232,11 +239,21 @@ function Player (senderID, number) {
 }
 
 function animate(time) {
+var ok= null;
+
+	if(ok === "ok"){
+	 pg.main(game.stage);
+	}
+		else {
+			ok = count(pg.context);
+		}
+		console.log(ok);
 	requestId = window.requestAnimationFrame(animate);
-	pg.main(game.stage);
+	
 }
 function start() {
 	animationStartTime = Date.now();
+	// count(ctx);
 	requestId = window.requestAnimationFrame(animate);
 }
 function stop() {
