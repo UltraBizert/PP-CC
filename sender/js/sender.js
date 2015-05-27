@@ -1,16 +1,18 @@
-window.addEventListener("keydown", doKeyDown, false);
-window.addEventListener("keyup", doKeyUp, false);
+// window.addEventListener("keydown", doKeyDown, false);
+// window.addEventListener("keyup", doKeyUp, false);
 
 var	game=  {
-		stage: null,
-		type: null,
-	},
+			stage: null,
+			type: null,
+		},
 	messages = { 
 		paddle: {
 			move: false,
 			direction: null,
 		},
 		messag: null,
+		pName : null,
+		gType : null,
 	},
 	// gameStages = {
 	// 	waiting: "Waiting",
@@ -123,6 +125,7 @@ function receiverMessage(namespace, message) {
 		document.querySelector('#stage').innerHTML = game.stage;
 		document.querySelector('#state').innerHTML = player.state;
 		document.querySelector('#paddle').innerHTML = player.paddle.position;
+		document.querySelector('#pName').innerHTML = document.getElementById("name").value;
 	} else {
 		document.querySelector('#major').style.display = "block";
 		document.querySelector('#main').style.display = "none";
@@ -198,22 +201,6 @@ function doKeyDown (e) {
 	}else if (e.keyCode === 68){
 		right();
 	}
-
-	if(e.keyCode == 80) {
-		pause();
-	}
-
-	if (e.keyCode == 82) {
-		//restart
-	}
-
-	if (e.keyCode === 67) {
-		connection();
-	}
-
-	if(e.keyCode === 83) {
-		start();
-	}
 };
 
 
@@ -229,11 +216,15 @@ function doKeyUp (e) {
 }
 
 function connection () {
-	if(session !== null) {
+
+this.pName = document.getElementById("name").value;
+
+	if(session !== null && pName !== "") {
+		messages.pName = pName;
 		messages.messag = "connect";
 		sendMessage(messages);
 
-	} else alert("Select chromecast");
+	} else alert("Выберете Chromecast и введите имя!");
 }
 
 function left () {
@@ -243,9 +234,25 @@ function left () {
 	sendMessage(messages);
 }
 
+function left2 () {
+	messages.paddle.move = false;
+	messages.paddle.direction = "";
+	messages.messag = "move";
+	sendMessage(messages);
+}
+
 function right () {
+	console.log("1");
 	messages.paddle.move = true;
 	messages.paddle.direction = "right";
+	messages.messag = "move";
+	sendMessage(messages);
+}
+
+function right2 () {
+	console.log("2");
+	messages.paddle.move = false;
+	messages.paddle.direction = "";
 	messages.messag = "move";
 	sendMessage(messages);
 }
@@ -256,12 +263,21 @@ function pause () {
 }
 
 function start (){
+	this.gType = document.getElementById("type").value;
+	console.log(gType);
+	messages.gType = gType;
 	messages.messag = "game";
 	sendMessage(messages);
 }
 
 function ready () {
-	messages.messag = "ready";
+	if(document.getElementById("btnReady").value === "Ready") {
+		messages.messag = "ready";
+		document.getElementById("btnReady").value = "Unready";
+	} else if(document.getElementById("btnReady").value === "Unready") {
+		messages.messag = "unready";
+		document.getElementById("btnReady").value = "Ready";
+	}
 	sendMessage(messages);
 }
 

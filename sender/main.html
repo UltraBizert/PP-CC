@@ -1,7 +1,7 @@
 <div class="container-fluid" id="main">
 	<div class="row">
 		<div class="page-header ">
-			<h1 class="text-center">Player name</h1>
+			<h1 class="text-center" id="pName">Player name</h1>
 		</div>
 	</div>
 	<div class="row info">
@@ -11,6 +11,15 @@
 			</div>
 			<div class="col-md-4 col-sm-6 col-xs-12">
 				<dt><strong>Player state:</strong></dt><dd id="state">value</dd>
+			</div>
+			<div class="col-md-4 col-sm-6 col-xs-12">
+				<dt><strong>Game type:</strong></dt>
+				<dd>
+					<select id="type">
+						<option>Opponents</option>
+						<option>Friends</option>
+					</select>
+				</dd>
 			</div>
 			<div class="col-md-4 col-sm-6 col-xs-12">
 				<dt><strong>Paddle:</strong></dt><dd id="paddle">value</dd>
@@ -25,7 +34,8 @@
 					<button onclick="start();" class="btn btn-default">Start game</button>
 				</div>
 				<div class="btn-group btn-group-lg">
-					<button onclick="ready();" class="btn btn-default">Ready</button>
+					<!-- <button id="btnReady" onclick="ready();" class="btn btn-default">Ready</button> -->
+					<input id="btnReady" onclick="ready();" class="btn btn-default" type="button" value="Ready">
 				</div>
 				<div class="btn-group btn-group-lg">
 					<button onclick="pause();" class="btn btn-default">Pause</button>
@@ -38,12 +48,12 @@
 	</div>
 	<div class="row third">
 		<div class="col-md-6 col-sm-6 col-xs-6 arrow">
-			<button onclick="left();"type="button" class="btn btn-default btn-block">
+			<button onmousedown="left();" onmouseup="left2();" type="button" class="btn btn-default btn-block">
 				<span class="glyphicon glyphicon-arrow-left"></span>
 			</button>
 		</div>
 		<div class="col-md-6 col-sm-6 col-xs-6 arrow">
-			<button onclick="right();" type="button" class="btn btn-default btn-block">
+			<button onmousedown="right();" onmouseup="right2();" type="button" class="btn btn-default btn-block">
 				<span class="glyphicon glyphicon-arrow-right"></span>
 			</button>
 		</div>

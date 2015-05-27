@@ -1,14 +1,14 @@
 function Playground (context) {
 	this.context = context || undefined;
 
-	this.init = function (paddle1, paddle2, ball, game) {
-		this.p1 = paddle1 || [];
-		this.p2 = paddle2 || [];
+	this.init = function (player1, player2, ball, game) {
+		this.p1 = player1 || [];
+		this.p2 = player2 || [];
 		this.ball = ball || {};
 		this.game = game || {};
 
-		this.p1.score = 0;
-		this.p2.score = 0;
+		this.r1 = this.p1.paddle;
+		this.r2 = this.p2.paddle;
 	}
 
 	this.draw = function () {
@@ -16,40 +16,38 @@ function Playground (context) {
 		this.context.fillStyle = '#272';
 		this.context.fillRect(0,0,W,H);
 
-		this.p1.draw(this.context);
-		this.p2.draw(this.context);
+		this.r1.draw(this.context);
+		this.r2.draw(this.context);
 		this.ball.draw(this.context);
 
-		updateScore(this.context, this.game, this.p1, this.p2, this.ball.score);
+		updateScore(this.context, this.game, this.r1, this.r2, this.ball.score);
 	};
 
-	this.main = function (gameStage) {
-		console.log(gameStage);
+	this.main = function (gameStage, paddles) {
+
 		switch (gameStage){
 
 		case "Ready":
 			console.log("ready");
-			ready(this.context, this.p1, this.p2);
+			ready(this.context, this.r1, this.r2);
 		break;
 
 		case "Round":
+		console.log(paddles);
+		console.log(this.r1);
+			this.r1.move(paddles[0]);
+			this.r2.move(paddles[1]);
 			this.ball.move();
-			checkCollides(this.ball, this.p1, this.p2);
+			checkCollides(this.ball, this.r1, this.r2);
 			this.draw();
 		break;
 
 		case "Pause":
-			stop(requestId);
+			stop();
 			pause(this.context);
 			console.log("game on pause");
 		break;
 
-		case "End game":
-			stop(requestId);
-			gameOver(this.context);
-
-			setTimeout(waiting(this.context, "ready", "ready"), 3000);
-		break;
 		}
 	};
 
@@ -96,35 +94,35 @@ function Paddle(pos) {
 		if(data.move === true) {
 			switch (data.direction) {
 			case "left":
-				if(this.x >= 0) this.x-= 15;
+				if(this.x >= 0) this.x-= W/40;
 			break;
 			case "right":
-				if(this.x <= W-this.w)this.x += 15;
+				if(this.x <= W-this.w)this.x += W/60;
 			break;
 			}
 		}
 	}
 }
 
-function checkCollides (ball, p1, p2) {
+function checkCollides (ball, r1, r2) {
 
-	if(collides(ball, p1)) {
-		collideAction(ball, p1);
+	if(collides(ball, r1)) {
+		collideAction(ball, r1);
 	}
-	else if(collides(ball, p2)) {
-		collideAction(ball, p2);
+	else if(collides(ball, r2)) {
+		collideAction(ball, r2);
 	}
 	else {
-		// increaseSpd(p1.score+p2.score);
+		// increaseSpd(r1.score+r2.score);
 		if(ball.y+ball.r>H){
 			ball.vy=-ball.vy;
 			ball.y=H-ball.r;
-			p2.score++;
+			r2.score++;
 		}
 		else if(ball.y<0){
 			ball.vy=-ball.vy;
 			ball.y=ball.r;
-			p1.score++;
+			r1.score++;
 		}
 
 		if(ball.x+ball.r>W){
@@ -173,10 +171,38 @@ function updateScore(context, game, paddle1, paddle2, score) {
 	if(game.type == 'opponents'){
 		context.fillText( paddle2.score, W/2, H/2-paddle2.y/4 );
 		context.fillText( paddle1.score, W/2, H/2+paddle2.y/4 );
-		if(paddle1.score>=10 || paddle2.score>=10) game.stage = "End game";
+
+		if(paddle1.score>=5) {
+			game.stage = "End game";
+
+			stop();
+			gameOver(context, "Победил первый игрок");
+			setTimeout(function() {
+				waiting(context, "ready", "ready");
+			}, 5000);
+		} else if(paddle2.score>=5) {
+			game.stage = "End game";
+
+			stop();
+			gameOver(context, "Победил второй игрок");
+			setTimeout(function() {
+				waiting(context, "ready", "ready");
+			}, 5000);
+		}
+
 	} else if (game.type == 'friends') {
 		context.fillText( score, W/2, H/2);
-		if (paddle1.score!=0 || paddle2.score!=0) game.stage = "End game";
+
+		if (paddle1.score!=0 || paddle2.score!=0) {
+			game.stage = "End game";
+
+			stop();
+			gameOver(context, "Вы набрали "+score+" очков");
+			setTimeout(function() {
+				waiting(context, "ready", "ready");
+			}, 5000);
+		}
+
 	}
 }
 
@@ -185,16 +211,8 @@ function pause (context) {
 	context.fillText("Game on pause", W/2-W/20, H/2);
 }
 
-function gameOver (context) {
 
-	context.fillStyle = '#272';
-	context.fillRect(0,0,W,H);
-
-	textStyle(context, H/10, "red");
-	context.fillText("GAME OVER", W/2-W/10, H/2-H/20);
-}
-
-function waiting (context, p1, p2) {
+function waiting (context, r1, r2) {
 
 	context.fillStyle = '#272';
 	context.fillRect(0,0,W,H);
@@ -204,66 +222,95 @@ function waiting (context, p1, p2) {
 
 	textStyle(context, H/20, "#345");
 
-	if (p1 == null) {
+	if (r1.state == null) {
 		context.fillText("Ожидание первого игрока", W/10, H/4);
 	}
 
-	if (p2 == null) {
+	if (r2.state == null) {
 		context.fillText("Ожидание второго игрока", W-W/2.2, H/4);
 	}
 
-	if (p1 == "connected") {
-		context.fillText("Первый игрок подключен", W/10, H/4);
+	if (r1.state == "connected") {
+		context.fillText(r1.pName + " подключен", W/10, H/4);
 	}
 
-	if(p2 == "connected") {
-		context.fillText("Второй игрок подключен", W-W/2.2, H/4);
+	if(r2.state == "connected") {
+		context.fillText(r2.pName + " подключен", W-W/2.2, H/4);
 	}
 
-	if (p1 == "ready") {
-		context.fillText("Первый игрок готов", W/10, H/4);
+	if (r1.state == "unready") {
+		context.fillText(r1.pName + " не готов", W/10, H/4);
 	}
 
-	if (p2 == "ready") {
-		context.fillText("Второй игрок готов", W-W/2.2, H/4);
+	if(r2.state == "unready") {
+		context.fillText(r2.pName + " не готов", W-W/2.2, H/4);
+	}
+
+	if (r1.state == "ready") {
+		context.fillText(r1.pName + " готов", W/10, H/4);
+	}
+
+	if (r2.state == "ready") {
+		context.fillText(r2.pName + " готов", W-W/2.2, H/4);
 	}
 
 }
 
-function ready (context, p1, p2) {
+function ready (context, r1, r2) {
 
 	context.fillStyle = '#272';
 	context.fillRect(0,0,W,H);
 
-	p1.draw(context);
-	p2.draw(context);
+	r1.draw(context);
+	r2.draw(context);
 
 	textStyle(context, H/10, "#345");
 	context.fillText("Press ready to start the game", W/2-W/4, H/2-H/20);
 }
 
-function count (context) {
+function count (context, ball, r1, r2, callback) {
+
+	context.fillStyle = '#272';
+	context.fillRect(0,0,W,H);
+
 	textStyle(context, H/10, "#5B5CE5");
 
 	setTimeout(function() {
 		context.fillText("3", W/3, H/3);
+		ball.draw(context);
+		r1.draw(context);
+		r2.draw(context);
 	}, 1000);
 	setTimeout(function() {
+		textStyle(context, H/10, "#5B5CE5");
 		context.fillText("2", W/3+W/10, H/3);
 	}, 2000);
 	setTimeout(function() {
 		context.fillText("1", W/3+W/5, H/3);
 	}, 3000);
-	return "ok";
+	setTimeout(function() {
+		callback.call();
+	}, 4000);
+
 }
 
-function startScreen (context, p1, p2) {
+function startScreen (context, r1, r2) {
 	context.fillStyle = '#272';
 	context.fillRect(0,0,W,H);
 
 	textStyle(context, H/10, "#345");
 	context.fillText("PING-PONG", W/3, H/10);
 	console.log('it work');
+}
+
+function gameOver (context, text) {
+
+	context.fillStyle = '#272';
+	context.fillRect(0,0,W,H);
+
+	textStyle(context, H/10, "red");
+	context.fillText("GAME OVER", W/2-W/8, H/2-H/20);
+	context.fillText(text, W/2-W/5, H/2+H/20);
 }
 
 function textStyle(context, size, color) {
