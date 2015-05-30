@@ -1,5 +1,5 @@
-// window.addEventListener("keydown", doKeyDown, false);
-// window.addEventListener("keyup", doKeyUp, false);
+window.addEventListener("keydown", doKeyDown, false);
+window.addEventListener("keyup", doKeyUp, false);
 
 var	game=  {
 			stage: null,
@@ -87,6 +87,7 @@ function sessionListener(e) {
 	session = e;
 	session.addUpdateListener(sessionUpdateListener);
 	session.addMessageListener(namespace, receiverMessage);
+
 }
 
 /**
@@ -196,10 +197,15 @@ function transcribe(words) {
 
 function doKeyDown (e) {
 
-	if (e.keyCode === 65){ 
-		left();
+	if (e.keyCode === 65){
+		if(messages.paddle.direction !=="left")
+			left();
+
+
 	}else if (e.keyCode === 68){
-		right();
+		if(messages.paddle.direction !== "right")
+			right();
+
 	}
 };
 
@@ -207,11 +213,12 @@ function doKeyDown (e) {
 function doKeyUp (e) {
 
 	if (e.keyCode === 65) {
-		messages.paddle.move = false;
-		sendMessage(messages);
+
+			left2();
+
 	}else if (e.keyCode === 68){
-		messages.paddle.move = false;
-		sendMessage(messages);
+
+			right2();
 	}
 }
 
@@ -234,17 +241,17 @@ function left () {
 	sendMessage(messages);
 }
 
-function left2 () {
-	messages.paddle.move = false;
-	messages.paddle.direction = "";
-	messages.messag = "move";
-	sendMessage(messages);
-}
-
 function right () {
 	console.log("1");
 	messages.paddle.move = true;
 	messages.paddle.direction = "right";
+	messages.messag = "move";
+	sendMessage(messages);
+}
+
+function left2 () {
+	messages.paddle.move = false;
+	messages.paddle.direction = "";
 	messages.messag = "move";
 	sendMessage(messages);
 }

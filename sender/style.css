@@ -12,6 +12,7 @@ body {
 
 body, html, .container-fluid {
 	height: 100%;
+	font-family: 'Architects Daughter', cursive;
 }
 
 div {

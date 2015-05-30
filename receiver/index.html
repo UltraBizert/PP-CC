@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" type="text/css" href="css/style.css">
+<link href='http://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
 
 <div class="all">
 	<div id="ground">
@@ -16,108 +17,3 @@
 <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script> 
 <script src="js/PP.js"></script>
 <script src="js/receiver.js"></script>
-
-<script type="text/javascript">
-	/*var data = {
-			paddle1: {},
-			paddle2: {},
-		},
-		requestId = 0;
-
-	window.addEventListener("keydown", doKeyDown, false);
-	window.addEventListener("keyup", doKeyUp, false);
-
-	window.onload = function () {
-
-	// document.querySelector('#menu').style.display = "none";
-
-	canvas.width = W;
-	canvas.height = H;
-
-	ball = new createBall();
-	pg = new Playground(ctx);
-	paddles.push(new Paddle(1));
-	paddles.push(new Paddle(2));
-	console.log(game);
-	pg.init(paddles[0], paddles[1], ball, game);
-	}
-
-	function animate(time) {
-		requestId = window.requestAnimationFrame(animate);
-		pg.main(game.stage);
-	}
-	function start() {
-		animationStartTime = Date.now();
-		requestId = window.requestAnimationFrame(animate);
-	}
-	function stop() {
-		if (requestId)
-		window.cancelAnimationFrame(requestId);
-		requestId = 0;
-	}
-
-	function doKeyDown (e) {
-		if (e.keyCode === 65){ 
-			data.paddle1.move = true;
-			data.paddle1.direction = "left";
-			paddles[0].move(data.paddle1);
-			paddles[1].move(data.paddle2);
-		}else if (e.keyCode === 68){
-			data.paddle1.move = true;
-			data.paddle1.direction = "right";
-			paddles[0].move(data.paddle1);
-			paddles[1].move(data.paddle2);
-		}
-
-		if (e.keyCode === 65){ 
-			data.paddle2.move = true;
-			data.paddle2.direction = "left";
-		}else if (e.keyCode === 68){
-			data.paddle2.move = true;
-			data.paddle2.direction = "right";
-		}
-
-		if(e.keyCode == 80) {
-			console.log(game.stage);
-			if(game.stage === "Pause") {
-				game.stage="Round";
-				start();
-			}else game.stage = "Pause";
-		}
-
-		if (e.keyCode == 82) {
-			key.restart = true;
-			game.stage = gameStages.round;
-		}
-
-		if (e.keyCode === 67) {
-			messages.messag = "connect";
-			sendMessage(messages);
-		}
-
-		if(e.keyCode === 83) {
-			messages.messag = "game";
-			sendMessage(messages);
-		}
-
-		if(e.keyCode === 77) {
-			toggle();
-		}
-	}
-
-	function doKeyUp (e) {
-
-	}
-
-	function toggle() {
-		var ele = document.getElementById("menu");
-
-		if(ele.style.display == "inline-block") {
-				ele.style.display = "none";
-		}
-		else {
-			ele.style.display = "inline-block";
-		}
-	} */
-
-</script>
