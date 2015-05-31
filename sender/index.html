@@ -8,9 +8,9 @@
 		<title>Sender</title>
 
 		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<link href="style.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
 		<link rel="import" href="main.html">
-		<link href='http://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 	</head>
 	<body>
 		<div class="container-fluid" id="major">
@@ -20,8 +20,8 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-8 col-sm-8 col-xs-8 pull-right">
-					<form class="form-inline con">
+				<div class="col-md-offset-5 col-sm-offset-5 col-xs-offset-6">
+					<form class="form-inline con" onsubmit="connection();">
 						<div class="form-group">
 							<input type="text" class="form-control" id="name" placeholder="Picachoo">
 						</div>
@@ -49,10 +49,6 @@
 		</div>
 	</body>
 
-<script>
-	var link = document.querySelector('link[rel=import]');
-	var content = link.import.querySelector('#main');
-</script>
 
 	<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>

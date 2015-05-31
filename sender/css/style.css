@@ -1,0 +1,103 @@
+body {
+
+  background: url(../image/back.jpg) no-repeat center center fixed; 
+  background-size: cover;
+}
+
+body, html, .container-fluid {
+	height: 100%;
+	overflow: hidden;
+
+}
+
+div {
+}
+
+a {
+	color: black;
+}
+
+h1 {
+	font-size: 70px;
+}
+
+.page-header {
+
+	position: relative;
+	margin-top: 0;
+	font-family: 'Lobster';
+
+	 color: #5D51D2;
+		-webkit-text-fill-color: #4F3DC0;
+		-webkit-text-stroke-width: 1px;
+		-webkit-text-stroke-color: black;
+	text-shadow: 0 0 10px #fff,
+					 0 0 20px #fff,
+					 0 0 30px #fff,
+					 /*0 0 40px #ff00de,*/
+					 /*0 0 70px #ff00de,*/
+					 /*0 0 80px #ff00de,*/
+					 /*0 0 100px #ff00de,*/
+					 0 0 150px #ff00de;
+}
+
+.info {
+	font-size: 120%;
+}
+
+.lead {
+	padding-top: 2%;
+}
+
+.help {
+	position: relative;
+	background-color: rgba(0, 120, 201, 0.9);
+	box-shadow: inset 0px 0px 15px 7px rgba(256,10,0,0.8);
+
+	height: 100%;
+	width:100%;
+
+	font-family: 'Architects Daughter', cursive;
+
+}
+
+.first{
+	background-color: #D7ABAB;
+	/*margin-top: auto + 23px;*/
+	/*border: 10px;*/
+	/*height: 70%;*/
+	/*width: 100%;*/
+	/*position: absolute;*/
+}
+
+.second{
+
+	background-color: #CCA463;
+
+	/*height: 500px;*/
+	/*width: 100%;*/
+}
+
+.btn-block {
+	height: 100%;
+	width:100%;
+}
+
+.arrow {
+	height: 30%;
+	/*width: 300px;*/
+}
+
+.third{
+	/*background-color: #D7ABAB;*/
+	height: 50%;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.con{
+	/*background-color: #35ED1B;*/
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+

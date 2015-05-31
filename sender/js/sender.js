@@ -14,18 +14,13 @@ var	game=  {
 		pName : null,
 		gType : null,
 	},
-	// gameStages = {
-	// 	waiting: "Waiting",
-	// 	ready: "Ready",
-	// 	round: "Round",
-	// 	pause: "Pause",
-	// 	endRound: "End round",
-	// 	endGame: "End game"
-	// },
 	gameTypes = {
 		opponents: "opponents",
 		friends: "friends"
 	};
+
+var link = document.querySelector('link[rel=import]');
+var content = link.import.querySelector('#main');
 
 var applicationID = '06A159A5';
 var namespace = 'urn:x-cast:ping-pong';

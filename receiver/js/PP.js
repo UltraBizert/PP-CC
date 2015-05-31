@@ -13,20 +13,12 @@ function Playground (context) {
 
 	this.draw = function () {
 
-		this.context.fillStyle = '#272';
-		this.context.fillRect(0,0,W,H);
-
-/*		context.shadowColor="#372244";
-		context.shadowOffsetX = 5;
-		context.shadowOffsetY = 5;
-		context.shadowBlur = 5
-*/
-
+		ground(this.context);
 		this.r1.draw(this.context);
 		this.r2.draw(this.context);
 		this.ball.draw(this.context);
 
-		updateScore(this.context,this.game, 
+		update(this.context,this.game, 
 						this.p1,
 						this.p2,
 						this.ball.score);
@@ -171,7 +163,7 @@ function collideAction(ball, p) {
 	}
 }
 
-function updateScore(context, game, player1, player2, score) {
+function update(context, game, player1, player2, score) {
 
 	textStyle(context, H/35, "white");
 	paddle1 = player1.paddle;
@@ -289,8 +281,7 @@ function waiting (context, r1, r2) {
 
 function ready (context, r1, r2) {
 
-	context.fillStyle = '#272';
-	context.fillRect(0,0,W,H);
+	ground (context);
 
 	r1.draw(context);
 	r2.draw(context);
@@ -301,8 +292,7 @@ function ready (context, r1, r2) {
 
 function count (context, ball, r1, r2, callback) {
 
-	context.fillStyle = '#272';
-	context.fillRect(0,0,W,H);
+	ground (context);
 
 	textStyle(context, H/10, "#5B5CE5", true);
 
@@ -347,6 +337,18 @@ function gameOver (context, text) {
 	context.fillText("Игра закончена", W/2, H/2);
 	context.textBaseline = "top";
 	context.fillText(text, W/2, H/2+H/15);
+}
+
+function ground (context) {
+	context.fillStyle = '#272';
+	context.fillRect(0,0,W,H);
+	context.fillStyle = '#F3D8D8';
+	context.fillRect(0, H/2, W, H/170);
+
+	// context.fillRect(0, 0, W, H/100);
+	// context.fillRect(0, 0, H/100, H);
+	// context.fillRect(0, H-H/100, W, H/100);
+	// context.fillRect(W-H/100,0, W, H);
 }
 
 function textStyle(context, size, color, shadow) {
