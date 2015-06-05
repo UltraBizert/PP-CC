@@ -208,12 +208,10 @@ function doKeyDown (e) {
 function doKeyUp (e) {
 
 	if (e.keyCode === 65) {
-
-			left2();
-
-	}else if (e.keyCode === 68){
-
-			right2();
+		stopMove();
+}
+	if (e.keyCode === 68){
+			stopMove();
 	}
 }
 
@@ -244,15 +242,7 @@ function right () {
 	sendMessage(messages);
 }
 
-function left2 () {
-	messages.paddle.move = false;
-	messages.paddle.direction = "";
-	messages.messag = "move";
-	sendMessage(messages);
-}
-
-function right2 () {
-	console.log("2");
+function stopMove () {
 	messages.paddle.move = false;
 	messages.paddle.direction = "";
 	messages.messag = "move";

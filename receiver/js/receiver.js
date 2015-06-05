@@ -49,10 +49,13 @@ players.push( new Player(null, 2));
 paddles.push({move: false, direction: null});
 paddles.push({move: false, direction: null});
 
+ball = new Ball();
+pg = new Playground(ctx);
+
 
 	cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
 	window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
-	// console.log('Starting Receiver Manager');
+	console.log(castReceiverManager);
 	
 	// handler for the 'ready' event
 	castReceiverManager.onReady = function(event) {
@@ -68,14 +71,13 @@ paddles.push({move: false, direction: null});
 			startScreen(ctx);
 		}
 	};
-	
-	// handler for 'senderdisconnected' event
 	castReceiverManager.onSenderDisconnected = function(event) {
-		console.log('Received Sender Disconnected event: ' + event.data);
-		if (window.castReceiverManager.getSenders().length == 0) {
-			window.close();
-		}
-	};
+	  if(window.castReceiverManager.getSenders().length == 0 &&
+	    event.reason == cast.receiver.system.DisconnectReason.REQUESTED_BY_SENDER) {
+	      window.close();
+	  }
+	}
+
 	
 	// handler for 'systemvolumechanged' event
 	castReceiverManager.onSystemVolumeChanged = function(event) {
@@ -93,8 +95,7 @@ paddles.push({move: false, direction: null});
 		// display the message from the sender
 
 		data = JSON.parse(event.data);
-		console.log(window.castReceiverManager.getSenders().length);
-		
+
 		switch(data.messag) {
 			case "connect":
 				if(players[0].id === null) {
@@ -119,12 +120,12 @@ paddles.push({move: false, direction: null});
 					mBusUpdate("You connected like player 2", game, players[1]);
 					window.messageBus.send(event.senderId, JSON.stringify(mBus));
 
+					pg.init(players[0], players[1], ball, game);
 				}else {
 
 					mBusUpdate("Game full", null, null);
 					window.messageBus.send(event.senderId, JSON.stringify(mBus));
 				}
-
 			break;
 
 			case "ready":
@@ -137,6 +138,8 @@ paddles.push({move: false, direction: null});
 					waiting(ctx, players[0], players[1]);
 					console.log("Player 2 ready");
 				}
+
+				pg.update(players[0], players[1]);
 			break;
 
 			case "unready":
@@ -149,30 +152,25 @@ paddles.push({move: false, direction: null});
 					waiting(ctx, players[0], players[1]);
 					console.log("Player 2 unready");
 				}
+
+				pg.update(players[0], players[1]);
 			break;
 
 			case "game":
 				if(players[1].state === "ready" && players[0].state === "ready") {
 
-					ball = new createBall();
-					pg = new Playground(ctx);
-
 					game.stage = gameStages.round;
-					pg.init(players[0], players[1], ball, game);
 
+					pg.update(players[0], players[1]);
 					count(ctx, pg.ball, pg.r1, pg.r2, start);
-
-					mBus.game = game;
-
-					console.log("Game started");
 				}else {
 
-					console.log(mBus.game.stage);
-					mBus.message = "Waiting for confirmation of readiness players.";
+					mBusUpdate("Waiting for confirmation of readiness players.");
 
 					window.messageBus.send(event.senderId, JSON.stringify(mBus));
 				}
 			break;
+
 			case "move":
 				if(game.stage == gameStages.round){
 					if(event.senderId == players[0].id){
@@ -202,10 +200,9 @@ paddles.push({move: false, direction: null});
 					game.stage = gameStages.waiting;
 
 					players[0].out();
-
 					console.log("Player 1 out");
 
-					waiting(ctx, players[0].state, players[1].state);
+					waiting(ctx, players[0], players[1]);
 
 					if(players[1].id === null) window.close(); //close app
 
@@ -219,7 +216,7 @@ paddles.push({move: false, direction: null});
 					players[1].out();
 					console.log("Player 2 out");
 
-					waiting(ctx, players[0].state, players[1].state);
+					waiting(ctx, players[0], players[1]);
 
 					if(players[0].id === null) window.close(); //close app
 				}
@@ -260,6 +257,7 @@ function animate(time) {
 	pg.main(game.stage, paddles);
 
 	requestId = window.requestAnimationFrame(animate);
+		console.log(requestId);
 }
 
 function start() {
@@ -270,10 +268,7 @@ function start() {
 }
 
 function stop() {
-		console.log(requestId);
-	if (requestId)
-	window.cancelAnimationFrame(requestId);
-	requestId = 0;
+cancelAnimationFrame(requestId);
 }
 
 function mBusUpdate (message, game, player) {
@@ -281,3 +276,4 @@ function mBusUpdate (message, game, player) {
 	mBus.game = game;
 	mBus.player = player;
 }
+

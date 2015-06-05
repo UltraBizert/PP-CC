@@ -1,36 +1,31 @@
 body {
-
-  background: url(../image/back.jpg) no-repeat center center fixed; 
-  background-size: cover;
+	background: url(../image/back.jpg) no-repeat center center fixed; 
+	background-size: cover;
 }
 
 body, html, .container-fluid {
 	height: 100%;
 	overflow: hidden;
-
-}
-
-div {
-}
-
-a {
-	color: black;
 }
 
 h1 {
 	font-size: 70px;
 }
 
-.page-header {
+a {
+	color: black;
+}
 
+
+.page-header {
 	position: relative;
 	margin-top: 0;
 	font-family: 'Lobster';
 
-	 color: #5D51D2;
-		-webkit-text-fill-color: #4F3DC0;
-		-webkit-text-stroke-width: 1px;
-		-webkit-text-stroke-color: black;
+	color: #5D51D2;
+	text-fill-color: #4F3DC0;
+	text-stroke-width: 1px;
+	text-stroke-color: black;
 	text-shadow: 0 0 10px #fff,
 					 0 0 20px #fff,
 					 0 0 30px #fff,
@@ -43,6 +38,7 @@ h1 {
 
 .info {
 	font-size: 120%;
+	display: none;
 }
 
 .lead {

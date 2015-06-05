@@ -1,7 +1,4 @@
 <div class="container-fluid" id="main">
-
-	<!-- <img src="/image/3.jpg" alt="container background" class="img-circle"> -->
-
 	<div class="row">
 		<div class="page-header ">
 			<h1 class="text-center" id="pName">Player name</h1>
@@ -14,7 +11,6 @@
 					<button onclick="start();" class="btn btn-primary">Start game</button>
 				</div>
 				<div class="btn-group btn-group-lg">
-					<!-- <button id="btnReady" onclick="ready();" class="btn btn-primary">Ready</button> -->
 					<input id="btnReady" onclick="ready();" class="btn btn-primary" type="button" value="Ready">
 				</div>
 				<div class="btn-group btn-group-lg">
@@ -28,12 +24,12 @@
 	</div>
 	<div class="row third">
 		<div class="col-md-6 col-sm-6 col-xs-6 arrow">
-			<button onmousedown="left();" onmouseup="left2();" type="button" class="btn btn-success btn-block">
+			<button onmousedown="left();" onmouseup="stopMove();" type="button" class="btn btn-success btn-block">
 				<span class="glyphicon glyphicon-arrow-left"></span>
 			</button>
 		</div>
 		<div class="col-md-6 col-sm-6 col-xs-6 arrow">
-			<button onmousedown="right();" onmouseup="right2();" type="button" class="btn btn-success btn-block">
+			<button onmousedown="right();" onmouseup="stopMove();" type="button" class="btn btn-success btn-block">
 				<span class="glyphicon glyphicon-arrow-right"></span>
 			</button>
 		</div>
@@ -59,6 +55,5 @@
 				<dt><strong>Paddle:</strong></dt><dd id="paddle">value</dd>
 			</div>
 		</dl>
-		<!-- <hr align="center" width="100%" size="2" color="#ff0000" /> -->
 	</div>
 </div>
